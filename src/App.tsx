@@ -1,25 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import Dashboard from "./containers/Dashboard/Dashboard";
+import ForgotPassword from "./containers/ForgotPassword/ForgotPassword";
+import Login from "./containers/Login/Login";
+import SignUp from "./containers/SignUp/SignUp";
+import Terms from "./containers/Terms/Terms";
+import useFirebaseAuth from "./hooks/useFirebaseAuth";
 
 function App() {
+  const { user } = useFirebaseAuth();
+  console.log("🚀 ~ App ~ user:", user);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={user ? <Dashboard /> : <Login />} />
+        <Route path={"/login"} element={<Login />} />
+        <Route path={"/sign-up"} element={<SignUp />} />
+        <Route path={"/forgot-pass"} element={<ForgotPassword />} />
+        <Route path={"/terms"} element={<Terms />} />
+
+        {/* <Redirect from={PROFILE} to={HOME} />
+      <Redirect from={MYLIST} to={HOME} /> */}
+        {/* <Route path={NOTFOUND} component={NotFound} /> */}
+      </Routes>
+    </Router>
   );
 }
 

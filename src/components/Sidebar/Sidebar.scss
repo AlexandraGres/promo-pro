@@ -1,0 +1,74 @@
+@import '../../variables.scss';
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100vh;
+  max-width: 230px;
+  width: 100%;
+  background: $white;
+  border-right: solid 1px $border;
+  padding-right: 2px;
+  font-weight: 500;
+  font-size: 14px;
+
+  .logo-container {
+    padding-left: 21px;
+    padding-top: 3px;
+    border-bottom: solid 1px $border;
+  }
+
+  .menu-container {
+    padding: 22px 34px;
+
+    .menu-title {
+      color: $default;
+      opacity: 0.5;
+      font-size: 14px;
+    }
+
+    img {
+      vertical-align: middle;
+      margin-right: 16px;
+    }
+
+    .active {
+      color: $active;
+      position: relative;
+      margin-left: -34px;
+      padding-left: 34px;
+
+      &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 2px;
+        height: 21px;
+        background: $active;
+        border-radius: 2px;
+      }
+    }
+
+    .disabled {
+      color: $default;
+      opacity: 0.5;
+    }
+  }
+
+  .buttons {
+    padding: 27px 0;
+    border-top: solid 1px $border;
+    margin: 0 23px;
+
+    button {
+      background: #f5f6f7;
+      box-shadow: none;
+      font-size: 14px;
+      color: $black;
+      padding: 9px;
+    }
+  }
+}

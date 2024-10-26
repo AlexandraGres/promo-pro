@@ -1,0 +1,24 @@
+@import "../../variables.scss";
+
+.user-menu {
+  display: flex;
+  align-items: center;
+
+  button {
+    color: $black;
+    font-size: 14px;
+
+    &.open {
+      color: $primary;
+    }
+  }
+
+  .MuiAvatar-circular {
+    border: 2px solid transparent;
+
+    &.open {
+      border: 2px solid rgba(76, 111, 255, 0.4);
+      box-sizing: border-box;
+    }
+  }
+}

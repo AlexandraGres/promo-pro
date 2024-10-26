@@ -1,0 +1,19 @@
+.bg-image {
+  max-width: 570px;
+  width: 100%;
+  min-height: 100vh;
+  background-size: cover;
+}
+
+.login-bg {
+  background-image: url(../../../public/login_bg.png);
+}
+
+.sign-up-bg {
+  background-image: url(../../../public/sign_up_bg.png);
+  background-position: center;
+}
+
+.forgot-pass-bg {
+  background-image: url(../../../public/forgot_pass_bg.png);
+}
