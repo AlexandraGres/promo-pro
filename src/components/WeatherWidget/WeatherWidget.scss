@@ -1,0 +1,42 @@
+@import '../../variables.scss';
+
+.weather {
+  background: $white;
+  border-radius: 6px;
+  box-shadow: 0px 24px 64px 0px #00000008;
+
+  h2 {
+    font-size: 52px;
+    font-weight: 500;
+  }
+
+  h5 {
+    text-transform: uppercase;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: $default;
+  }
+
+  sup {
+    font-size: 18px;
+    vertical-align: super;
+  }
+
+  svg {
+    font-size: 60px;
+    color: $dropdown;
+    opacity: 0.3;
+    margin-left: 30px;
+  }
+
+  .date {
+    font-size: 21px;
+    font-weight: 500;
+    margin: 16px 0 0;
+  }
+}
