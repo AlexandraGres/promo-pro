@@ -1,45 +1,54 @@
 import * as yup from 'yup';
 
+const emailField = yup
+  .string()
+  .email('Please enter a valid email')
+  .required('Required');
+
+const passwordField = yup.string().required('Required');
+
+const confirmPasswordField = (refField: string) =>
+  yup
+    .string()
+    .oneOf([yup.ref(refField), undefined], 'Passwords must match')
+    .required('Required');
+
+const fileField = yup
+  .mixed()
+  .nullable()
+  .test('fileFormat', 'Only JPG and PNG files are allowed', (value) => {
+    if (!value) return true;
+    if (value instanceof File) {
+      return ['image/jpeg', 'image/png'].includes(value.type);
+    }
+    return false;
+  });
+
 export const loginSchema = yup.object().shape({
-  email: yup.string().email('Please enter a valid email').required('Required'),
-  password: yup.string().required('Required'),
+  email: emailField,
+  password: passwordField,
 });
 
 export const signUpSchema = yup.object().shape({
   firstName: yup.string().required('Required'),
   lastName: yup.string().required('Required'),
-  email: yup.string().email('Please enter a valid email').required('Required'),
+  email: emailField,
   age: yup.number().positive().integer().required('Required'),
-  password: yup
-    .string()
-    .min(8, 'Must be 8 characters long at least')
-    .required('Required'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password'), undefined], 'Passwords must match')
-    .required('Required'),
+  password: passwordField.min(8, 'Must be 8 characters long at least'),
+  confirmPassword: confirmPasswordField('password'),
 });
 
 export const forgotPassSchema = yup.object().shape({
-  email: yup.string().email('Please enter a valid email').required('Required'),
+  email: emailField,
 });
 
-export const articleSchema = yup.object({
+export const articleSchema = yup.object().shape({
   title: yup
     .string()
     .required('Title is required')
     .max(100, 'Title must be under 100 characters'),
   text: yup.string().required('Text is required'),
-  file: yup
-    .mixed()
-    .nullable()
-    .test('fileFormat', 'Only JPG and PNG files are allowed', (value) => {
-      if (!value) return true;
-      if (value instanceof File) {
-        return ['image/jpeg', 'image/png'].includes(value.type);
-      }
-      return false;
-    }),
+  file: fileField,
 });
 
 export const userInfoSchema = yup.object().shape({
@@ -49,25 +58,11 @@ export const userInfoSchema = yup.object().shape({
 });
 
 export const userAvatarSchema = yup.object().shape({
-  file: yup
-    .mixed()
-    .test('fileFormat', 'Only JPG and PNG files are allowed', (value) => {
-      if (!value) return false;
-      if (value instanceof File) {
-        return ['image/jpeg', 'image/png'].includes(value.type);
-      }
-      return false;
-    }),
+  file: fileField.test('fileRequired', 'File is required', (value) => !!value),
 });
 
 export const changePasswordSchema = yup.object().shape({
-  oldPassword: yup.string().required('Required'),
-  newPassword: yup
-    .string()
-    .min(8, 'Must be 8 characters long at least')
-    .required('Required'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('newPassword'), undefined], 'Passwords must match')
-    .required('Required'),
+  oldPassword: passwordField,
+  newPassword: passwordField.min(8, 'Must be 8 characters long at least'),
+  confirmPassword: confirmPasswordField('newPassword'),
 });
