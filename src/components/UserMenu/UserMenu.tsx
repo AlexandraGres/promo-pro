@@ -1,40 +1,53 @@
 import './UserMenu.scss';
 
 import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material';
+import { MouseEvent, useState } from 'react';
 
-import DownIcon from '../DownIcon/DownIcon';
-import React from 'react';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { RootState } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const UserMenu = () => {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleNavigation = () => {
+    navigate('/edit-profile');
+    handleClose();
+  };
 
   return (
-    <Box className="user-menu">
-      <Avatar className={open ? 'open' : ''} src="avatar.png" sx={{ mx: 1, height: 48, width: 48 }} />
+    <Box className='user-menu'>
+      <Avatar
+        className={open ? 'open' : ''}
+        src={user?.photoURL}
+        sx={{ mx: 1, height: 48, width: 48 }}
+      />
 
       <Button
-        id="profile-button"
+        id='profile-button'
         className={open ? 'open' : ''}
         aria-controls={open ? 'user-menu' : undefined}
-        aria-haspopup="true"
+        aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
         disableElevation
         onClick={handleClick}
-        endIcon={<DownIcon />}
-        variant="text"
+        endIcon={<KeyboardArrowDownIcon />}
+        variant='text'
       >
-        Annette Black
+        {user?.displayName}
       </Button>
 
       <Menu
-        id="user-menu"
+        id='user-menu'
         MenuListProps={{
           'aria-labelledby': 'profile-button',
         }}
@@ -42,7 +55,7 @@ const UserMenu = () => {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={handleNavigation} disableRipple>
           Edit Profile
         </MenuItem>
       </Menu>

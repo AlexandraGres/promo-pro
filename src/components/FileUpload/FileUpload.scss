@@ -1,0 +1,39 @@
+@import '../../variables.scss';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 170px;
+  border: dashed 1px $secondary;
+  padding: 22px;
+  margin: 22px 0;
+
+  .link {
+    color: $primary;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  input {
+    display: none;
+  }
+
+  .error-message {
+    color: red;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  span {
+    overflow: hidden;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
+}

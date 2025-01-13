@@ -1,0 +1,52 @@
+@import '../../variables.scss';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+.textarea {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  label {
+    color: $secondary;
+    margin-bottom: 10px;
+    font-weight: 500;
+    font-weight: 'Roboto';
+  }
+
+  textarea {
+    background: $background;
+    width: 100%;
+    border-radius: 3px;
+    padding: 18px 32px;
+    border: solid 1px transparent;
+    margin-bottom: 27px;
+    resize: none;
+    width: 100%;
+    min-height: 240px;
+
+    &:focus {
+      border: solid 1px $primary;
+      outline: none;
+    }
+  }
+
+  &.error {
+    textarea {
+      border-color: red;
+    }
+  }
+
+  span {
+    color: $secondary;
+    font-size: 13px;
+    margin-top: -25px;
+    margin-bottom: 27px;
+  }
+
+  .error-message {
+    position: absolute;
+    color: red;
+    bottom: -20px;
+    white-space: nowrap;
+  }
+}

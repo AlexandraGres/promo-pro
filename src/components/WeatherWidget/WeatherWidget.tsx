@@ -1,7 +1,7 @@
 import './WeatherWidget.scss';
 
 import { Box, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import CloudIcon from '@mui/icons-material/Cloud';
@@ -9,7 +9,7 @@ import GrainIcon from '@mui/icons-material/Grain';
 import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 
-interface WeatherData {
+interface WeatherProps {
   name: string;
   sys: {
     country: string;
@@ -31,7 +31,7 @@ interface Date {
 const kyiv = { lat: 50.4333, lon: 30.5167 };
 
 const WeatherWidget = () => {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [weather, setWeather] = useState<WeatherProps | null>(null);
   const [location, setLocation] = useState(kyiv);
   const [date, setDate] = useState<Date | null>(null);
 
@@ -95,7 +95,7 @@ const WeatherWidget = () => {
   };
 
   return (
-    <Box sx={{ px: 3, py: 2 }} className='weather'>
+    <Box sx={{ px: 3, py: 2, ml: 'auto', mt: 2 }} className='weather box'>
       <Typography textTransform='uppercase'>Weather widget</Typography>
       <h3 className='date'>{date?.formattedDate}</h3>
       <p>{date?.dayOfWeek}</p>

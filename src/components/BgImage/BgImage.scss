@@ -17,3 +17,15 @@
 .forgot-pass-bg {
   background-image: url(../../../public/forgot_pass_bg.png);
 }
+
+@media (max-width: 768px) {
+  .bg-image {
+    max-width: 25%;
+  }
+}
+
+@media (max-width: 480px) {
+  .bg-image {
+    display: none;
+  }
+}

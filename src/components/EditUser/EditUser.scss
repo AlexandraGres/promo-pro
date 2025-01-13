@@ -1,0 +1,43 @@
+.user-form {
+  .form-title {
+    margin-bottom: 15px;
+  }
+
+  h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .MuiTabPanel-root {
+    padding: 30px 0 0;
+  }
+
+  form {
+    margin-top: 20px;
+  }
+
+  .input {
+    max-width: 465px;
+
+    input {
+      padding: 14px 32px;
+    }
+
+    label {
+      font-size: 14px;
+    }
+
+    ::placeholder {
+      font-size: 14px;
+    }
+  }
+
+  span {
+    font-size: 13px;
+  }
+
+  .file-upload {
+    height: 256px;
+  }
+}

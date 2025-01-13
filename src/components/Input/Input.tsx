@@ -11,13 +11,13 @@ interface InputProps {
 }
 
 const Input = ({ label, description, ...props }: InputProps) => {
-  const [field, meta] = useField(props);
+  const [field, { touched, error }] = useField(props);
 
   return (
-    <div className={meta.touched && meta.error ? 'input error' : 'input'}>
+    <div className={touched && error ? 'input error' : 'input'}>
       {label && <label>{label}</label>}
       <input {...field} {...props} />
-      {meta.touched && meta.error && <span className="error-message">{meta.error}</span>}
+      {touched && error && <span className='error-message'>{error}</span>}
       {description && <span>{description}</span>}
     </div>
   );

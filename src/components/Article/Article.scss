@@ -1,0 +1,49 @@
+@import '../../variables.scss';
+
+.article {
+  position: relative;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+
+  .menu {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+  }
+
+  .tag {
+    text-transform: uppercase;
+    color: $secondary;
+    font-size: 13px;
+  }
+
+  .date {
+    color: $secondary;
+    font-size: 13px;
+  }
+
+  .title {
+    font-size: 21px;
+    color: $black;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+
+  .text {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .name {
+    font-size: 13px;
+    color: $primary;
+  }
+
+  .read-more {
+    font-size: 11px;
+    color: $primary;
+    margin-left: auto;
+  }
+}

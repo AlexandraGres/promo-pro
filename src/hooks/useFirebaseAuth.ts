@@ -1,57 +1,101 @@
-import { addDoc, collection, getDocs } from "firebase/firestore";
 import {
-  auth,
-  facebookProvider,
-  firestore,
-  googleProvider,
-} from "../firebase/firebase";
-import {
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  UserInfo,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-} from "firebase/auth";
-import { useEffect, useState } from "react";
+} from 'firebase/auth';
+import {
+  auth,
+  facebookProvider,
+  firestore,
+  googleProvider,
+} from '../firebase/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { resetUser, setUser } from '../store/auth/authSlice';
 
-// interface userProps {
-//   email: string;
-//   password: string;
-//   name: string;
-//   age: string;
-// }
+import { getErrorMessage } from '../utils';
+import { showNotification } from '../store/notification/notificationSlice';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+
+interface Error {
+  code?: string;
+  message: string;
+}
 
 const useFirebaseAuth = () => {
-  const [user, setUser] = useState<any | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(firestore, 'users', user.uid);
+        const docSnap = await getDoc(docRef);
+        const userData = docSnap.data();
+
+        dispatch(
+          setUser({
+            uid: user.uid,
+            email: user.email || '',
+            displayName:
+              `${userData?.firstName} ${userData?.lastName}` ||
+              userData?.displayName ||
+              '',
+            photoURL: userData?.photoURL || '',
+          })
+        );
+      } else {
+        dispatch(resetUser());
+      }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [dispatch]);
 
-  const readData = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(firestore, "users"));
-      querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
-      });
-    } catch (error: any) {
-      console.log("🚀 ~ signUp ~ error:", error.message);
-      setError(error.message);
-    }
+  const handleAuthSuccess = async (user: UserInfo, message: string) => {
+    const docRef = doc(firestore, 'users', user.uid);
+    const docSnap = await getDoc(docRef);
+    const userData = docSnap.data();
+
+    dispatch(
+      setUser({
+        uid: user.uid,
+        email: user.email || '',
+        displayName:
+          `${userData?.firstName} ${userData?.lastName}` ||
+          userData?.displayName ||
+          '',
+        photoURL: userData?.photoURL || '',
+      })
+    );
+    dispatch(
+      showNotification({
+        message,
+        severity: 'success',
+      })
+    );
+  };
+
+  const handleAuthError = (error: Error) => {
+    const message = error.code ? getErrorMessage(error.code) : error.message;
+    dispatch(
+      showNotification({
+        message,
+        severity: 'error',
+      })
+    );
   };
 
   const signUp = async (
     email: string,
     password: string,
-    name: string,
+    firstName: string,
+    lastName: string,
     age: number
   ) => {
     try {
@@ -60,19 +104,29 @@ const useFirebaseAuth = () => {
         email,
         password
       );
+
       const user = userCredential.user;
-      setUser(user);
+
       if (user) {
-        console.log("🚀 ~ signUp ~ user:", user);
-        await addDoc(collection(firestore, "users"), {
-          name,
+        await setDoc(doc(firestore, 'users', user.uid), {
+          uid: user.uid,
+          firstName,
+          lastName,
           age,
           email,
+          photoURL: '',
+          articles: [],
         });
+
+        handleAuthSuccess(
+          user,
+          'Your account has been created successfully. Welcome aboard!'
+        );
+
+        return true;
       }
-    } catch (error: any) {
-      console.log("🚀 ~ signUp ~ error:", error.message);
-      setError(error.message);
+    } catch (error) {
+      handleAuthError(error);
     }
   };
 
@@ -83,65 +137,70 @@ const useFirebaseAuth = () => {
         email,
         password
       );
-      setUser(userCredential.user);
-      console.log("🚀 ~ login ~ user:", user);
-    } catch (error: any) {
-      console.log("🚀 ~ login ~ error:", error.message);
-      setError(error.message);
+      handleAuthSuccess(
+        userCredential.user,
+        'You have successfully logged in. Welcome back!'
+      );
+    } catch (error) {
+      handleAuthError(error);
     }
   };
 
   const forgotPassword = async (email: string) => {
     try {
       await sendPasswordResetEmail(auth, email);
-    } catch (error: any) {
-      console.log("🚀 ~ forgotPassword ~ error:", error.message);
-      setError(error.message);
+      dispatch(
+        showNotification({
+          message:
+            'A password reset email has been sent to your email address. Please check your inbox.',
+          severity: 'success',
+        })
+      );
+    } catch (error) {
+      handleAuthError(error);
     }
   };
 
-  const loginWithGoogle = async () => {
+  const loginWithProvider = async (
+    provider: GoogleAuthProvider | FacebookAuthProvider,
+    message: string
+  ) => {
     try {
-      const userCredential = await signInWithPopup(auth, googleProvider);
-      setUser(userCredential.user);
-      console.log("🚀 ~ loginWithGoogle ~ userCredential.user:", user);
-    } catch (error: any) {
-      console.log("🚀 ~ loginWithGoogle ~ error:", error.message);
-      setError(error.message);
+      const userCredential = await signInWithPopup(auth, provider);
+      handleAuthSuccess(userCredential.user, message);
+    } catch (error) {
+      handleAuthError(error);
     }
   };
 
-  const loginWithFacebook = async () => {
-    try {
-      const userCredential = await signInWithPopup(auth, facebookProvider);
-      setUser(userCredential.user);
-    } catch (error: any) {
-      console.log("🚀 ~ loginWithFacebook ~ error:", error.message);
-      setError(error.message);
-    }
-  };
+  const loginWithGoogle = () =>
+    loginWithProvider(
+      googleProvider,
+      'You have successfully logged in with Google. Welcome back!'
+    );
+
+  const loginWithFacebook = () =>
+    loginWithProvider(
+      facebookProvider,
+      'You have successfully logged in with Facebook. Welcome back!'
+    );
 
   const logout = async () => {
     try {
       await signOut(auth);
-      setUser(null);
-      console.log("🚀 ~ logged out");
-    } catch (error: any) {
-      console.log("🚀 ~ logout ~ error.message:", error.message);
-      setError(error.message);
+      dispatch(resetUser());
+    } catch (error) {
+      handleAuthError(error);
     }
   };
 
   return {
-    user,
-    error,
     signUp,
     login,
     forgotPassword,
     loginWithGoogle,
     loginWithFacebook,
     logout,
-    readData,
   };
 };
 

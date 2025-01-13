@@ -1,12 +1,9 @@
 @import '../../variables.scss';
 
 .navbar {
-  display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 78px;
-  width: 100%;
-  padding: 0 35px;
+  padding: 16px 35px 13px;
   background: $white;
   border-bottom: solid 1px $border;
   font-size: 14px;

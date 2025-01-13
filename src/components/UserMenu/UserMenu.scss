@@ -1,8 +1,9 @@
-@import "../../variables.scss";
+@import '../../variables.scss';
 
 .user-menu {
   display: flex;
   align-items: center;
+  margin-left: auto;
 
   button {
     color: $black;
@@ -20,5 +21,11 @@
       border: 2px solid rgba(76, 111, 255, 0.4);
       box-sizing: border-box;
     }
+  }
+}
+
+@media (max-width: 480px) {
+  .user-menu {
+    margin-bottom: 10px;
   }
 }

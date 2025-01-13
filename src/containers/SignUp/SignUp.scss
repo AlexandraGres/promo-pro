@@ -2,4 +2,16 @@
   height: 100%;
   min-height: 100vh;
   display: flex;
+
+  .age {
+    width: 50%;
+  }
+}
+
+@media (max-width: 950px) {
+  .sign-up {
+    .age {
+      width: 100%;
+    }
+  }
 }

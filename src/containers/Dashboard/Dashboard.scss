@@ -1,6 +1,9 @@
 @import '../../variables.scss';
 
 .dashboard {
-  display: flex;
   background-color: $background;
+
+  h2 {
+    margin: 0;
+  }
 }

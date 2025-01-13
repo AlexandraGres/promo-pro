@@ -6,7 +6,13 @@ import UserMenu from '../UserMenu/UserMenu';
 
 const Navbar = () => {
   return (
-    <Box className="navbar">
+    <Box
+      display='flex'
+      className='navbar'
+      sx={{
+        flexDirection: { xs: 'column-reverse', sm: 'row' },
+      }}
+    >
       <Search />
       <UserMenu />
     </Box>

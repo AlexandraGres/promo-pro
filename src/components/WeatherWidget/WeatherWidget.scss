@@ -1,9 +1,8 @@
 @import '../../variables.scss';
 
 .weather {
-  background: $white;
-  border-radius: 6px;
-  box-shadow: 0px 24px 64px 0px #00000008;
+  max-width: 320px;
+  width: 100%;
 
   h2 {
     font-size: 52px;

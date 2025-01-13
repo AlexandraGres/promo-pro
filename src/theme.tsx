@@ -42,6 +42,28 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          fontSize: 14,
+          fontWeight: 500,
+          color: '#6F7C8B80',
+          textTransform: 'none',
+          '&.Mui-selected': {
+            color: '#1943EF',
+          },
+        },
+      },
+    },
+    MuiCircularProgress: {
+      styleOverrides: {
+        root: {
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+        },
+      },
+    },
   },
 };
 

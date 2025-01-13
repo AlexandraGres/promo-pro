@@ -1,0 +1,50 @@
+@import '../../variables.scss';
+
+.sorting {
+  display: flex;
+  align-items: center;
+  background: $white;
+  border-radius: 3px;
+  padding-left: 12px;
+
+  .label {
+    color: $default;
+    opacity: 0.5;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  button {
+    font-size: 14px;
+    color: $black;
+    padding: 10px 4px;
+
+    &.open {
+      color: $primary;
+    }
+
+    span {
+      &.MuiButton-icon {
+        position: relative;
+
+        &::before {
+          content: '';
+          position: absolute;
+          background: $background;
+          height: 50px;
+          width: 1px;
+          top: -13px;
+        }
+      }
+    }
+  }
+
+  .MuiAvatar-circular {
+    border: 2px solid transparent;
+
+    &.open {
+      border: 2px solid rgba(76, 111, 255, 0.4);
+      box-sizing: border-box;
+    }
+  }
+}
