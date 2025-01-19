@@ -12,7 +12,7 @@ import { signUpSchema } from '../../utils/schemas';
 import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 import { useNavigate } from 'react-router-dom';
 
-interface UserProps {
+interface SignUpProps {
   email: string;
   password: string;
   confirmPassword: string;
@@ -26,7 +26,7 @@ const SignUp = () => {
   const { signUp } = useFirebaseAuth();
   const navigate = useNavigate();
 
-  const initialValues: UserProps = {
+  const initialValues: SignUpProps = {
     firstName: '',
     lastName: '',
     age: '',
