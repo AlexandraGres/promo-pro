@@ -18,7 +18,7 @@ import {
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { resetUser, setUser } from '../store/auth/authSlice';
 
-import { getErrorMessage } from '../utils';
+import { getErrorMessage } from '../utils/getErrorMessage';
 import { showNotification } from '../store/notification/notificationSlice';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';

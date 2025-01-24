@@ -21,7 +21,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ArticleProps } from '../components/ArticleForm/ArticleForm';
 import { User } from '../store/auth/authSlice';
 import { showNotification } from '../store/notification/notificationSlice';
-import { timeAgo } from '../utils';
+import { timeAgo } from '../utils/timeAgo';
 import { useDispatch } from 'react-redux';
 
 const useArticleManagement = () => {
