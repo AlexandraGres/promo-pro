@@ -76,8 +76,10 @@ const useArticleManagement = () => {
   useEffect(() => {
     if (isOnline) {
       fetchArticles();
+    } else {
+      dispatch(setArticles(getOfflineArticles()));
     }
-  }, [isOnline, fetchArticles]);
+  }, [isOnline, fetchArticles, dispatch]);
 
   const saveArticle = async (
     id: string | undefined,
