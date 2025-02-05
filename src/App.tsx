@@ -10,6 +10,7 @@ import ForgotPassword from './containers/ForgotPassword/ForgotPassword';
 import Login from './containers/Login/Login';
 import NotFound from './containers/NotFound/NotFound';
 import Notification from './components/Notification/Notification';
+import { OnlineStatusProvider } from './components/Providers/OnlineStatusProvider';
 import { RootState } from './store/store';
 import SignUp from './containers/SignUp/SignUp';
 import Terms from './containers/Terms/Terms';
@@ -48,12 +49,14 @@ function App() {
   }
 
   return (
-    <Router>
-      {show && (
-        <Notification message={message} severity={severity} show={show} />
-      )}
-      {routes}
-    </Router>
+    <OnlineStatusProvider>
+      <Router>
+        {show && (
+          <Notification message={message} severity={severity} show={show} />
+        )}
+        {routes}
+      </Router>
+    </OnlineStatusProvider>
   );
 }
 

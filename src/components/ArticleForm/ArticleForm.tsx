@@ -4,13 +4,9 @@ import {
   CircularProgress,
   MenuItem,
   Select,
-  SelectChangeEvent,
   Typography,
 } from '@mui/material';
 import { Form, Formik } from 'formik';
-import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
-import { firestore, storage } from '../../firebase/firebase';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 

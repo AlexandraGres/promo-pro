@@ -63,11 +63,29 @@ const WeatherWidget = () => {
   useEffect(() => {
     const fetchWeather = async () => {
       const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&units=metric&appid=${API_KEY}`
-      );
-      const data = await response.json();
-      setWeather(data);
+
+      try {
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&units=metric&appid=${API_KEY}`
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data');
+        }
+
+        const data = await response.json();
+        setWeather(data);
+
+        localStorage.setItem('weather', JSON.stringify(data));
+      } catch (error) {
+        console.warn('Error fetching weather data:', error);
+
+        const cachedWeather = localStorage.getItem('weather');
+
+        if (cachedWeather) {
+          setWeather(JSON.parse(cachedWeather));
+        }
+      }
     };
     fetchWeather();
   }, [location]);

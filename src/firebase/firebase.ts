@@ -3,8 +3,12 @@ import {
   GoogleAuthProvider,
   getAuth,
 } from 'firebase/auth';
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+} from 'firebase/firestore';
 
-import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 
@@ -20,7 +24,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-export const firestore = getFirestore(app);
+
+export const firestore = initializeFirestore(app, {
+  localCache: persistentLocalCache({
+    tabManager: persistentMultipleTabManager(),
+  }),
+});
+
 export const storage = getStorage(app);
 export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();

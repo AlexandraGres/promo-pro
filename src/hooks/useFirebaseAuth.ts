@@ -38,23 +38,35 @@ const useFirebaseAuth = () => {
         const docSnap = await getDoc(docRef);
         const userData = docSnap.data();
 
-        dispatch(
-          setUser({
-            uid: user.uid,
-            email: user.email || '',
-            displayName:
-              `${userData?.firstName} ${userData?.lastName}` ||
-              userData?.displayName ||
-              '',
-            photoURL: userData?.photoURL || '',
-          })
-        );
+        const userInfo = {
+          uid: user.uid,
+          email: user.email || '',
+          displayName:
+            `${userData?.firstName} ${userData?.lastName}` ||
+            userData?.displayName ||
+            '',
+          photoURL: userData?.photoURL || '',
+        };
+
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        dispatch(setUser(userInfo));
       } else {
         dispatch(resetUser());
+        localStorage.removeItem('user');
       }
     });
 
     return () => unsubscribe();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!navigator.onLine) {
+      const cachedUser = localStorage.getItem('user');
+
+      if (cachedUser) {
+        dispatch(setUser(JSON.parse(cachedUser)));
+      }
+    }
   }, [dispatch]);
 
   const handleAuthSuccess = async (user: UserInfo, message: string) => {
@@ -62,17 +74,20 @@ const useFirebaseAuth = () => {
     const docSnap = await getDoc(docRef);
     const userData = docSnap.data();
 
-    dispatch(
-      setUser({
-        uid: user.uid,
-        email: user.email || '',
-        displayName:
-          `${userData?.firstName} ${userData?.lastName}` ||
-          userData?.displayName ||
-          '',
-        photoURL: userData?.photoURL || '',
-      })
-    );
+    const userInfo = {
+      uid: user.uid,
+      email: user.email || '',
+      displayName:
+        `${userData?.firstName} ${userData?.lastName}` ||
+        userData?.displayName ||
+        '',
+      photoURL: userData?.photoURL || '',
+    };
+
+    localStorage.setItem('user', JSON.stringify(userInfo));
+
+    dispatch(setUser(userInfo));
+
     dispatch(
       showNotification({
         message,
@@ -98,6 +113,16 @@ const useFirebaseAuth = () => {
     lastName: string,
     age: number
   ) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection. Please try again later.',
+          severity: 'error',
+        })
+      );
+      return false;
+    }
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -131,6 +156,21 @@ const useFirebaseAuth = () => {
   };
 
   const login = async (email: string, password: string) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection. You can continue in offline mode.',
+          severity: 'warning',
+        })
+      );
+
+      const cachedUser = localStorage.getItem('user');
+      if (cachedUser) {
+        dispatch(setUser(JSON.parse(cachedUser)));
+      }
+      return;
+    }
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -147,6 +187,16 @@ const useFirebaseAuth = () => {
   };
 
   const forgotPassword = async (email: string) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection. Please try again later.',
+          severity: 'error',
+        })
+      );
+      return;
+    }
+
     try {
       await sendPasswordResetEmail(auth, email);
       dispatch(
@@ -165,6 +215,16 @@ const useFirebaseAuth = () => {
     provider: GoogleAuthProvider | FacebookAuthProvider,
     message: string
   ) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection. Please try again later.',
+          severity: 'error',
+        })
+      );
+      return;
+    }
+
     try {
       const userCredential = await signInWithPopup(auth, provider);
       handleAuthSuccess(userCredential.user, message);
@@ -186,9 +246,20 @@ const useFirebaseAuth = () => {
     );
 
   const logout = async () => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection. Please try again later.',
+          severity: 'warning',
+        })
+      );
+      return;
+    }
+
     try {
       await signOut(auth);
       dispatch(resetUser());
+      localStorage.removeItem('user');
     } catch (error) {
       handleAuthError(error);
     }

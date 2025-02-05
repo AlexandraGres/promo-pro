@@ -14,10 +14,12 @@ import { RootState } from '../../store/store';
 import Typography from '@mui/material/Typography';
 import useArticleManagement from '../../hooks/useArticleManagement';
 import { useNavigate } from 'react-router-dom';
+import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
 import { useSelector } from 'react-redux';
 
 const ITEM_HEIGHT = 40;
 const MAX_TEXT_LENGTH = 100;
+const defaultImageUrl = 'post-img.png';
 
 const Article = ({
   id,
@@ -37,6 +39,12 @@ const Article = ({
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const isAuthor = user ? uid === user.uid : false;
+
+  const isOnline = useOnlineStatus();
+
+  const imageUrl = isOnline
+    ? coverPhotoUrl || defaultImageUrl
+    : defaultImageUrl;
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -67,7 +75,7 @@ const Article = ({
       <CardMedia
         component='img'
         height='168'
-        image={coverPhotoUrl || 'post-img.png'}
+        image={imageUrl}
         alt='post image'
       />
       {isAuthor ? (

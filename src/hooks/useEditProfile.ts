@@ -21,6 +21,17 @@ const useEditProfile = () => {
   const dispatch = useDispatch();
 
   const updateUserInfo = async (uid: string, userInfo: User) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection.',
+          severity: 'warning',
+        })
+      );
+
+      return;
+    }
+
     try {
       const docRef = doc(firestore, 'users', uid);
       const docSnap = await getDoc(docRef);
@@ -62,6 +73,17 @@ const useEditProfile = () => {
   };
 
   const updateUserAvatar = async (uid: string, file: File) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection.',
+          severity: 'warning',
+        })
+      );
+
+      return;
+    }
+
     try {
       const storageRef = ref(storage, `users/${file.name}`);
       const uploadResult = await uploadBytes(storageRef, file);
@@ -97,6 +119,17 @@ const useEditProfile = () => {
     oldPassword: string,
     newPassword: string
   ) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection.',
+          severity: 'warning',
+        })
+      );
+
+      return;
+    }
+
     try {
       const user = auth.currentUser;
 

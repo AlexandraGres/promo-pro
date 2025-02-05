@@ -1,6 +1,13 @@
 @import '~normalize.css';
 @import 'variables.scss';
 
+@font-face {
+  font-family: 'Roboto';
+  src: url('../public/fonts/Roboto-Regular.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .container {
   max-width: 1200px;
   padding: 0 15px;

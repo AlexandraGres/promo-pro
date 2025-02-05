@@ -23,10 +23,17 @@ import { User } from '../store/auth/authSlice';
 import { showNotification } from '../store/notification/notificationSlice';
 import { timeAgo } from '../utils/timeAgo';
 import { useDispatch } from 'react-redux';
+import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
+
+const getOfflineArticles = () => {
+  const data = localStorage.getItem('articles');
+  return data ? JSON.parse(data) : null;
+};
 
 const useArticleManagement = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const isOnline = useOnlineStatus();
 
   const fetchArticles = useCallback(async () => {
     setLoading(true);
@@ -46,6 +53,8 @@ const useArticleManagement = () => {
         } as ArticleProps;
       });
 
+      localStorage.setItem('articles', JSON.stringify(articlesList));
+
       dispatch(setArticles(articlesList));
     } catch (error) {
       console.error('Error fetching articles:', error);
@@ -55,6 +64,9 @@ const useArticleManagement = () => {
           severity: 'error',
         })
       );
+
+      dispatch(setArticles(getOfflineArticles()));
+
       return null;
     } finally {
       setLoading(false);
@@ -62,14 +74,27 @@ const useArticleManagement = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    fetchArticles();
-  }, [fetchArticles]);
+    if (isOnline) {
+      fetchArticles();
+    }
+  }, [isOnline, fetchArticles]);
 
   const saveArticle = async (
     id: string | undefined,
     values: ArticleProps,
     user: User
   ) => {
+    if (!navigator.onLine) {
+      dispatch(
+        showNotification({
+          message: 'No internet connection.',
+          severity: 'warning',
+        })
+      );
+
+      return;
+    }
+
     setLoading(true);
 
     const { category, createdAt, file, title, text } = values;

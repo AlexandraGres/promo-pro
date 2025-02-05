@@ -16,6 +16,7 @@ const ArticleList = () => {
   const { articles, searchQuery } = useSelector(
     (state: RootState) => state.articles
   );
+
   const [filter, setFilter] = useState<string>('All Categories');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const navigate = useNavigate();
