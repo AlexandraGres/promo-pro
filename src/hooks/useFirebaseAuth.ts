@@ -72,16 +72,26 @@ const useFirebaseAuth = () => {
   const handleAuthSuccess = async (user: UserInfo, message: string) => {
     const docRef = doc(firestore, 'users', user.uid);
     const docSnap = await getDoc(docRef);
-    const userData = docSnap.data();
+    let userData = docSnap.data();
+
+    if (!userData) {
+      userData = {
+        uid: user.uid,
+        firstName: user.displayName?.split(' ')[0] || '',
+        lastName: user.displayName?.split(' ')[1] || '',
+        age: null,
+        email: user.email || '',
+        photoURL: user.photoURL || '',
+        articles: [],
+      };
+      await setDoc(docRef, userData);
+    }
 
     const userInfo = {
       uid: user.uid,
       email: user.email || '',
-      displayName:
-        `${userData?.firstName} ${userData?.lastName}` ||
-        userData?.displayName ||
-        '',
-      photoURL: userData?.photoURL || '',
+      displayName: `${userData.firstName} ${userData.lastName}`,
+      photoURL: userData.photoURL || '',
     };
 
     localStorage.setItem('user', JSON.stringify(userInfo));
@@ -159,15 +169,11 @@ const useFirebaseAuth = () => {
     if (!navigator.onLine) {
       dispatch(
         showNotification({
-          message: 'No internet connection. You can continue in offline mode.',
+          message: 'No internet connection. Try again later.',
           severity: 'warning',
         })
       );
 
-      const cachedUser = localStorage.getItem('user');
-      if (cachedUser) {
-        dispatch(setUser(JSON.parse(cachedUser)));
-      }
       return;
     }
 
