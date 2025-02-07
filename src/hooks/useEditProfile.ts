@@ -41,7 +41,7 @@ const useEditProfile = () => {
         ...userData,
         firstName: userInfo.firstName || userData.firstName,
         lastName: userInfo.lastName || userData.lastName,
-        age: userInfo.age?.toString() || userData.age,
+        age: userInfo.age?.toString() || userData.age || null,
       };
 
       await updateDoc(docRef, updatedUser);
