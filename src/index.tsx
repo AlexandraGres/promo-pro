@@ -10,32 +10,30 @@ import reportWebVitals from './reportWebVitals';
 import { store } from './store/store';
 import theme from './theme';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <CssBaseline />
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ThemeProvider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <CssBaseline />
+        <ThemeProvider theme={theme}>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </ThemeProvider>
+    </React.StrictMode>,
 );
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker
-      .register('/serviceWorker.js')
-      .then((registration) => {
-        console.log('Service Worker registered: ', registration);
-      })
-      .catch((error) => {
-        console.log('Service Worker registration failed: ', error);
-      });
-  });
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register('/serviceWorker.js')
+            .then((registration) => {
+                console.log('Service Worker registered: ', registration);
+            })
+            .catch((error) => {
+                console.log('Service Worker registration failed: ', error);
+            });
+    });
 }
 
 // If you want to start measuring performance in your app, pass a function

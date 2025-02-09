@@ -9,58 +9,57 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const UserMenu = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
-  const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleNavigation = () => {
-    navigate('/edit-profile');
-    handleClose();
-  };
+    const { user } = useSelector((state: RootState) => state.auth);
+    const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
 
-  return (
-    <Box className='user-menu'>
-      <Avatar
-        className={open ? 'open' : ''}
-        src={user?.photoURL}
-        sx={{ mx: 1, height: 48, width: 48 }}
-      />
+    const handleClick = (event: MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
 
-      <Button
-        id='profile-button'
-        className={open ? 'open' : ''}
-        aria-controls={open ? 'user-menu' : undefined}
-        aria-haspopup='true'
-        aria-expanded={open ? 'true' : undefined}
-        disableElevation
-        onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}
-        variant='text'
-      >
-        {user?.displayName}
-      </Button>
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
-      <Menu
-        id='user-menu'
-        MenuListProps={{
-          'aria-labelledby': 'profile-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={handleNavigation} disableRipple>
-          Edit Profile
-        </MenuItem>
-      </Menu>
-    </Box>
-  );
+    const handleNavigation = () => {
+        navigate('/edit-profile');
+        handleClose();
+    };
+
+    return (
+        <Box className="user-menu">
+            <Avatar className={open ? 'open' : ''} src={user?.photoURL} sx={{ mx: 1, height: 48, width: 48 }} />
+
+            <Button
+                id="profile-button"
+                className={open ? 'open' : ''}
+                aria-controls={open ? 'user-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                disableElevation
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon />}
+                variant="text"
+            >
+                {user?.displayName}
+            </Button>
+
+            <Menu
+                id="user-menu"
+                MenuListProps={{
+                    'aria-labelledby': 'profile-button',
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+            >
+                <MenuItem onClick={handleNavigation} disableRipple>
+                    Edit Profile
+                </MenuItem>
+            </Menu>
+        </Box>
+    );
 };
 
 export default UserMenu;
