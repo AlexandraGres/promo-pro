@@ -1,4 +1,3 @@
-import { Dispatch } from '@reduxjs/toolkit';
 import {
   FacebookAuthProvider,
   GoogleAuthProvider,
@@ -10,14 +9,15 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
 import { auth, facebookProvider, firestore, googleProvider } from '../firebase/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { resetUser, setUser } from '../store/auth/authSlice';
 
+import { Dispatch } from '@reduxjs/toolkit';
 import { showNotification } from '../store/notification/notificationSlice';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
 
 const useFirebaseAuth = () => {
   const dispatch = useDispatch();
@@ -30,10 +30,16 @@ const useFirebaseAuth = () => {
 
       if (docSnap.exists()) {
         const userData = docSnap.data();
+
+        const displayName =
+          `${userData.firstName || ''} ${userData.lastName || ''}`.trim() ||
+          userData.displayName ||
+          '';
+
         const userInfo = {
           uid,
           email: userData.email || '',
-          displayName: `${userData.firstName} ${userData.lastName}` || userData.displayName || '',
+          displayName,
           firstName: userData.firstName || '',
           lastName: userData.lastName || '',
           age: userData.age || '',

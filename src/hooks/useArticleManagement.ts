@@ -10,16 +10,16 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { ArticleProps } from '../components/ArticleForm/ArticleForm';
-import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
 import { firestore, storage } from '../firebase/firebase';
 import { setArticles, updateArticles } from '../store/articles/articleSlice';
+import { useCallback, useEffect, useState } from 'react';
 
+import { ArticleProps } from '../components/ArticleForm/ArticleForm';
 import { User } from '../store/auth/authSlice';
 import { showNotification } from '../store/notification/notificationSlice';
 import { timeAgo } from '../utils/timeAgo';
+import { useDispatch } from 'react-redux';
+import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
 
 const getOfflineArticles = () => {
   const data = localStorage.getItem('articles');
@@ -195,7 +195,7 @@ const useArticleManagement = () => {
       } catch (error) {
         dispatch(
           showNotification({
-            message: 'Failed to load article. Please try again later.',
+            message: error.message,
             severity: 'error',
           }),
         );

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES6",
     "lib": ["dom", "dom.iterable", "esnext", "webworker"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -17,5 +17,6 @@
     "jsx": "react-jsx",
     "useUnknownInCatchVariables": false
   },
-  "include": ["src", "public/serviceWorker.js", "cypress"]
+  "include": ["src", "public/serviceWorker.js", "cypress"],
+  "exclude": ["node_modules"]
 }

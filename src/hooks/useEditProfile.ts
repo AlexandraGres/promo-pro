@@ -1,12 +1,12 @@
 import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from 'firebase/auth';
+import { auth, firestore, storage } from '../firebase/firebase';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { setDisplayName, setPhotoURL } from '../store/auth/authSlice';
 
+import { showNotification } from '../store/notification/notificationSlice';
 import { useDispatch } from 'react-redux';
 import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
-import { auth, firestore, storage } from '../firebase/firebase';
-import { setDisplayName, setPhotoURL } from '../store/auth/authSlice';
-import { showNotification } from '../store/notification/notificationSlice';
 
 interface User {
   firstName?: string;
@@ -141,7 +141,7 @@ const useEditProfile = () => {
     } catch (error) {
       dispatch(
         showNotification({
-          message: 'Failed to update password. Please try again later.',
+          message: error.message,
           severity: 'error',
         }),
       );
