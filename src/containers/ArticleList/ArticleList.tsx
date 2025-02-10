@@ -51,7 +51,7 @@ const ArticleList = () => {
           alignItems="center"
           sx={{ mb: 2, flexDirection: { xs: 'column', sm: 'row' } }}
         >
-          <h2>Articles Dashboard 12</h2>
+          <h2>Articles Dashboard</h2>
           <Filter setFilter={setFilter} />
           <Sorting setSortOrder={setSortOrder} />
         </Box>
