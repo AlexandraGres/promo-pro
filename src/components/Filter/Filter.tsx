@@ -4,7 +4,14 @@ import { Box, Button, Menu, MenuItem } from '@mui/material';
 import { MouseEvent, useState } from 'react';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { categories } from '../ArticleForm/ArticleForm';
+
+const categories = [
+  { id: 0, title: 'All Categories' },
+  { id: 1, title: 'Productivity' },
+  { id: 2, title: 'Media' },
+  { id: 3, title: 'Business' },
+  { id: 4, title: 'Technology' },
+];
 
 interface FilterProps {
   setFilter: (filter: string) => void;
