@@ -1,15 +1,15 @@
-import AddIcon from '@mui/icons-material/Add';
 import { Box, Button, CircularProgress } from '@mui/material';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Article from '../../components/Article/Article';
-import Filter from '../../components/Filter/Filter';
 import Sorting, { SortOrder } from '../../components/Sorting/Sorting';
 
+import AddIcon from '@mui/icons-material/Add';
+import Article from '../../components/Article/Article';
+import Filter from '../../components/Filter/Filter';
+import { RootState } from '../../store/store';
 import WeatherWidget from '../../components/WeatherWidget/WeatherWidget';
 import useArticleManagement from '../../hooks/useArticleManagement';
-import { RootState } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 
 const ArticleList = () => {
   const { loading } = useArticleManagement();
@@ -51,7 +51,7 @@ const ArticleList = () => {
           alignItems="center"
           sx={{ mb: 2, flexDirection: { xs: 'column', sm: 'row' } }}
         >
-          <h2>Articles Dashboard 1</h2>
+          <h2>Articles Dashboard 12</h2>
           <Filter setFilter={setFilter} />
           <Sorting setSortOrder={setSortOrder} />
         </Box>
