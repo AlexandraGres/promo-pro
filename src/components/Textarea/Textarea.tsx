@@ -15,7 +15,7 @@ const Textarea = ({ label, ...props }: TextareaProps) => {
     <div className={touched && error ? 'textarea error' : 'textarea'}>
       {label && <label>{label}</label>}
       <textarea {...field} {...props} />
-      {touched && error && <span className='error-message'>{error}</span>}
+      {touched && error && <span className="error-message">{error}</span>}
     </div>
   );
 };

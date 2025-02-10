@@ -1,15 +1,15 @@
 import './Dashboard.scss';
 
+import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Drawer, IconButton } from '@mui/material';
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import ArticleForm from '../../components/ArticleForm/ArticleForm';
-import ArticleList from '../ArticleList/ArticleList';
 import EditUser from '../../components/EditUser/EditUser';
-import MenuIcon from '@mui/icons-material/Menu';
 import Navbar from '../../components/Navbar/Navbar';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import { useState } from 'react';
+import ArticleList from '../ArticleList/ArticleList';
 
 const Dashboard = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,9 +31,9 @@ const Dashboard = () => {
   };
 
   return (
-    <Box className='dashboard' display='flex'>
+    <Box className="dashboard" display="flex">
       <Drawer
-        variant='temporary'
+        variant="temporary"
         open={mobileOpen}
         onTransitionEnd={handleDrawerTransitionEnd}
         onClose={handleDrawerClose}
@@ -48,7 +48,7 @@ const Dashboard = () => {
         <Sidebar />
       </Drawer>
       <Drawer
-        variant='permanent'
+        variant="permanent"
         sx={{
           display: { xs: 'none', md: 'block' },
           '& .MuiDrawer-paper': {
@@ -62,11 +62,11 @@ const Dashboard = () => {
       >
         <Sidebar />
       </Drawer>
-      <Box width='100%'>
+      <Box width="100%">
         <IconButton
-          color='default'
-          aria-label='open drawer'
-          edge='start'
+          color="default"
+          aria-label="open drawer"
+          edge="start"
           onClick={handleDrawerToggle}
           sx={{
             display: { md: 'none' },
@@ -79,11 +79,11 @@ const Dashboard = () => {
         </IconButton>
         <Navbar />
         <Routes>
-          <Route path='/' element={<ArticleList />} />
-          <Route path='/edit-article/:id' element={<ArticleForm />} />
-          <Route path='/add-article' element={<ArticleForm />} />
-          <Route path='/edit-profile' element={<EditUser />} />
-          <Route path='/edit-account' element={<h1>Edit Account</h1>} />
+          <Route path="/" element={<ArticleList />} />
+          <Route path="/edit-article/:id" element={<ArticleForm />} />
+          <Route path="/add-article" element={<ArticleForm />} />
+          <Route path="/edit-profile" element={<EditUser />} />
+          <Route path="/edit-account" element={<h1>Edit Account</h1>} />
         </Routes>
       </Box>
     </Box>

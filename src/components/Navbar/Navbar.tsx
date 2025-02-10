@@ -7,8 +7,8 @@ import UserMenu from '../UserMenu/UserMenu';
 const Navbar = () => {
   return (
     <Box
-      display='flex'
-      className='navbar'
+      display="flex"
+      className="navbar"
       sx={{
         flexDirection: { xs: 'column-reverse', sm: 'row' },
       }}

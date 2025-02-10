@@ -22,10 +22,7 @@ describe('notificationSlice', () => {
       show: true,
     };
 
-    const nextState = notificationReducer(
-      initialState,
-      showNotification(notificationPayload)
-    );
+    const nextState = notificationReducer(initialState, showNotification(notificationPayload));
 
     expect(nextState).toEqual({
       message: 'Operation successful',

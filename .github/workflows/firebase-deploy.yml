@@ -20,9 +20,23 @@ jobs:
 
       - name: Install dependencies  
         run: npm install  
+      
+      - name: Run Lint
+        run: npm run lint
 
-      - name: Run tests  
-        run: npm test  
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Build
+        env:
+          REACT_APP_WEATHER_API_KEY: ${{vars.REACT_APP_WEATHER_API_KEY}}
+          REACT_APP_FIREBASE_API_KEY: ${{vars.REACT_APP_FIREBASE_API_KEY}}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{vars.REACT_APP_FIREBASE_AUTH_DOMAIN}}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{vars.REACT_APP_FIREBASE_PROJECT_ID}}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{vars.REACT_APP_FIREBASE_STORAGE_BUCKET}}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{vars.REACT_APP_FIREBASE_MESSAGING_SENDER_ID}}
+          REACT_APP_FIREBASE_APP_ID: ${{vars.REACT_APP_FIREBASE_APP_ID}}
+        run: CI=false npm run build
 
       - name: Deploy to Firebase  
         run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}

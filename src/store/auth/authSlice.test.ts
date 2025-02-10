@@ -1,10 +1,4 @@
-import authReducer, {
-  User,
-  resetUser,
-  setDisplayName,
-  setPhotoURL,
-  setUser,
-} from './authSlice';
+import authReducer, { User, resetUser, setDisplayName, setPhotoURL, setUser } from './authSlice';
 
 describe('authSlice', () => {
   const sampleUser: User = {

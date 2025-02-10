@@ -21,9 +21,7 @@ const articleSlice = createSlice({
     },
     updateArticles: (state, action: PayloadAction<string>) => {
       if (state.articles) {
-        state.articles = state.articles.filter(
-          (article) => article.id !== action.payload
-        );
+        state.articles = state.articles.filter((article) => article.id !== action.payload);
       }
     },
     setSearchQuery: (state, action: PayloadAction<string>) => {
@@ -32,7 +30,6 @@ const articleSlice = createSlice({
   },
 });
 
-export const { setArticles, updateArticles, setSearchQuery } =
-  articleSlice.actions;
+export const { setArticles, updateArticles, setSearchQuery } = articleSlice.actions;
 
 export default articleSlice.reducer;

@@ -1,10 +1,5 @@
-import articleReducer, {
-  setArticles,
-  setSearchQuery,
-  updateArticles,
-} from './articleSlice';
-
 import { ArticleProps } from '../../components/ArticleForm/ArticleForm';
+import articleReducer, { setArticles, setSearchQuery, updateArticles } from './articleSlice';
 
 const mockArticles: ArticleProps[] = [
   {

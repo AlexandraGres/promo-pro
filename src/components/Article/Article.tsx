@@ -1,21 +1,21 @@
 import './Article.scss';
 
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Box, CardActions, Link, Menu, MenuItem } from '@mui/material';
-import { MouseEvent, useState } from 'react';
 
-import { ArticleProps } from '../ArticleForm/ArticleForm';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { RootState } from '../../store/store';
 import Typography from '@mui/material/Typography';
-import useArticleManagement from '../../hooks/useArticleManagement';
-import { useNavigate } from 'react-router-dom';
-import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
+import { MouseEvent, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import useArticleManagement from '../../hooks/useArticleManagement';
+import { RootState } from '../../store/store';
+import { ArticleProps } from '../ArticleForm/ArticleForm';
+import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
 
 const ITEM_HEIGHT = 40;
 const MAX_TEXT_LENGTH = 100;
@@ -42,9 +42,7 @@ const Article = ({
 
   const isOnline = useOnlineStatus();
 
-  const imageUrl = isOnline
-    ? coverPhotoUrl || defaultImageUrl
-    : defaultImageUrl;
+  const imageUrl = isOnline ? coverPhotoUrl || defaultImageUrl : defaultImageUrl;
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -68,32 +66,24 @@ const Article = ({
       : text;
 
   return (
-    <Card
-      sx={{ maxWidth: 372, width: '100%', borderRadius: '6px' }}
-      className='article'
-    >
-      <CardMedia
-        component='img'
-        height='168'
-        image={imageUrl}
-        alt='post image'
-      />
+    <Card sx={{ maxWidth: 372, width: '100%', borderRadius: '6px' }} className="article">
+      <CardMedia component="img" height="168" image={imageUrl} alt="post image" />
       {isAuthor ? (
         <div>
           <IconButton
-            aria-label='more'
-            id='long-button'
+            aria-label="more"
+            id="long-button"
             aria-controls={open ? 'long-menu' : undefined}
             aria-expanded={open ? 'true' : undefined}
-            aria-haspopup='true'
+            aria-haspopup="true"
             onClick={handleClick}
-            className='menu'
+            className="menu"
           >
             <MoreHorizIcon sx={{ color: 'white' }} />
           </IconButton>
 
           <Menu
-            id='long-menu'
+            id="long-menu"
             MenuListProps={{
               'aria-labelledby': 'long-button',
             }}
@@ -109,10 +99,10 @@ const Article = ({
               },
             }}
           >
-            <MenuItem key='edit' onClick={() => handleEdit(id)}>
+            <MenuItem key="edit" onClick={() => handleEdit(id)}>
               Edit
             </MenuItem>
-            <MenuItem key='delete' onClick={() => handleDelete(id)}>
+            <MenuItem key="delete" onClick={() => handleDelete(id)}>
               Delete
             </MenuItem>
           </Menu>
@@ -123,23 +113,23 @@ const Article = ({
 
       <CardContent sx={{ px: 3 }}>
         <Box display={'flex'} justifyContent={'space-between'}>
-          <span className='tag'>{category}</span>
-          <span className='date'>{createdAt}</span>
+          <span className="tag">{category}</span>
+          <span className="date">{createdAt}</span>
         </Box>
 
-        <Typography variant='h3' className='title'>
+        <Typography variant="h3" className="title">
           {title}
         </Typography>
 
-        <Typography variant='body2' className='text'>
+        <Typography variant="body2" className="text">
           {truncatedText}
         </Typography>
       </CardContent>
       <CardActions sx={{ display: 'flex', px: 3, marginTop: 'auto' }}>
         <Avatar src={profilePicUrl} sx={{ height: 32, width: 32 }} />
-        <span className='name'>{author}</span>
+        <span className="name">{author}</span>
         {text.length > MAX_TEXT_LENGTH && (
-          <Link className='read-more' onClick={handleToggleText}>
+          <Link className="read-more" onClick={handleToggleText}>
             {isExpanded ? 'Show less ←' : 'Read more →'}
           </Link>
         )}

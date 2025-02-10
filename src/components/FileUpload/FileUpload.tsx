@@ -1,8 +1,8 @@
 import './FileUpload.scss';
 
 import { Box, Typography } from '@mui/material';
-import { ChangeEvent, DragEvent } from 'react';
 import { useField, useFormikContext } from 'formik';
+import { ChangeEvent, DragEvent } from 'react';
 
 const FileUpload = ({ file }: { file: File | null }) => {
   const formikProps = useFormikContext();
@@ -34,27 +34,27 @@ const FileUpload = ({ file }: { file: File | null }) => {
 
   return (
     <Box
-      id='drop-zone'
-      className='file-upload'
+      id="drop-zone"
+      className="file-upload"
       onClick={handleClick}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
-      <img src='/upload.svg' alt='upload icon' />
+      <img src="/upload.svg" alt="upload icon" />
       <Typography sx={{ fontWeight: 500, fontSize: 13 }}>.JPG .PNG </Typography>
       <Typography sx={{ fontWeight: 500, fontSize: 13, color: '#6F7C8B80' }}>
         You can also upload files by
       </Typography>
-      <Typography className='link'>clicking here</Typography>
+      <Typography className="link">clicking here</Typography>
       <span>{file && file.name}</span>
       <input
-        id='file-input'
-        name='file'
-        type='file'
-        accept='image/jpeg,image/png'
+        id="file-input"
+        name="file"
+        type="file"
+        accept="image/jpeg,image/png"
         onChange={handleFileChange}
       />
-      {error && <span className='error-message'>{error}</span>}
+      {error && <span className="error-message">{error}</span>}
     </Box>
   );
 };

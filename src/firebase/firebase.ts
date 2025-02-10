@@ -1,8 +1,5 @@
-import {
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  getAuth,
-} from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { FacebookAuthProvider, GoogleAuthProvider, getAuth } from 'firebase/auth';
 import {
   initializeFirestore,
   persistentLocalCache,
@@ -10,7 +7,6 @@ import {
 } from 'firebase/firestore';
 
 import { getStorage } from 'firebase/storage';
-import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

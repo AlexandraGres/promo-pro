@@ -1,8 +1,8 @@
 import './EditUser.scss';
 
+import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
 
 import UserAvatarForm from '../UserAvatarForm/UserAvatarForm';
 import UserInfoForm from '../UserInfoForm/UserInfoForm';
@@ -16,29 +16,26 @@ const EditUser: React.FC = () => {
   };
 
   return (
-    <Box
-      sx={{ maxWidth: 630, mx: 'auto', my: 6, p: 4 }}
-      className='box user-form'
-    >
-      <h3 className='form-title'>Manage your account</h3>
+    <Box sx={{ maxWidth: 630, mx: 'auto', my: 6, p: 4 }} className="box user-form">
+      <h3 className="form-title">Manage your account</h3>
       <TabContext value={value}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <TabList onChange={handleChange} aria-label='User account'>
-            <Tab label='Edit Information' value='1' />
-            <Tab label='User Avatar' value='2' />
-            <Tab label='Change Password' value='3' />
+          <TabList onChange={handleChange} aria-label="User account">
+            <Tab label="Edit Information" value="1" />
+            <Tab label="User Avatar" value="2" />
+            <Tab label="Change Password" value="3" />
           </TabList>
         </Box>
-        <TabPanel value='1'>
+        <TabPanel value="1">
           <h4>Change your information</h4>
           <UserInfoForm />
         </TabPanel>
-        <TabPanel value='2'>
+        <TabPanel value="2">
           <h4>Change your photo</h4>
           <span>Drag and drop file below</span>
           <UserAvatarForm />
         </TabPanel>
-        <TabPanel value='3'>
+        <TabPanel value="3">
           <h4>Change your password</h4>
 
           <UserPasswordForm />

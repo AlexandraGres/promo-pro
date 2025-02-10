@@ -1,9 +1,8 @@
 import './Filter.scss';
 
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
 import { MouseEvent, useState } from 'react';
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 const categories = [
   { id: 0, title: 'All Categories' },
@@ -32,23 +31,23 @@ const Filter = ({ setFilter }: FilterProps) => {
   };
 
   return (
-    <Box className='filter'>
-      <span className='label'>Show: </span>
+    <Box className="filter">
+      <span className="label">Show: </span>
       <Button
-        id='show-button'
+        id="show-button"
         className={open ? 'open' : ''}
         aria-controls={open ? 'filter' : undefined}
-        aria-haspopup='true'
+        aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         disableElevation
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
-        variant='text'
+        variant="text"
       >
         {category}
       </Button>
       <Menu
-        id='filter'
+        id="filter"
         MenuListProps={{
           'aria-labelledby': 'show-button',
         }}
