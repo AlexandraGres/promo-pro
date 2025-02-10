@@ -6,7 +6,7 @@ on:
       - master  
 
 jobs:  
-  build-and-deploy:  
+  build-and-test:  
     runs-on: ubuntu-latest  
 
     steps:  
@@ -20,12 +20,15 @@ jobs:
 
       - name: Install dependencies  
         run: npm install  
-      
+
       - name: Run Lint
-        run: npm run lint
+        run: npx eslint 'src/**/*.{ts,tsx}' --fix
+
+      - name: Run Jest Unit Tests
+        run: npx jest
 
       - name: Install Firebase CLI
-        run: npm install -g firebase-tools
+        run: npm install -g firebase-tools 
 
       - name: Build
         env:
@@ -38,5 +41,16 @@ jobs:
           REACT_APP_FIREBASE_APP_ID: ${{vars.REACT_APP_FIREBASE_APP_ID}}
         run: CI=false npm run build
 
-      - name: Deploy to Firebase  
-        run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
+  deploy:  
+        needs: build-and-test  
+        runs-on: ubuntu-latest  
+    
+        steps:  
+          - name: Checkout repository  
+            uses: actions/checkout@v3  
+    
+          - name: Install Firebase CLI
+            run: npm install -g firebase-tools  
+    
+          - name: Deploy to Firebase  
+            run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}  
