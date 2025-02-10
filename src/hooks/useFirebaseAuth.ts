@@ -1,284 +1,260 @@
 import {
-  FacebookAuthProvider,
-  GoogleAuthProvider,
-  UserInfo,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
+    FacebookAuthProvider,
+    GoogleAuthProvider,
+    UserInfo,
+    createUserWithEmailAndPassword,
+    onAuthStateChanged,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut,
 } from 'firebase/auth';
-import {
-  auth,
-  facebookProvider,
-  firestore,
-  googleProvider,
-} from '../firebase/firebase';
+import { auth, facebookProvider, firestore, googleProvider } from '../firebase/firebase';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { resetUser, setUser } from '../store/auth/authSlice';
 
-import { getErrorMessage } from '../utils/getErrorMessage';
+import { Dispatch } from '@reduxjs/toolkit';
 import { showNotification } from '../store/notification/notificationSlice';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-
-interface Error {
-  code?: string;
-  message: string;
-}
+import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
 
 const useFirebaseAuth = () => {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const isOnline = useOnlineStatus();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
+    const fetchUser = async (uid: string, dispatch: Dispatch) => {
+        try {
+            const docRef = doc(firestore, 'users', uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const userData = docSnap.data();
+                const userInfo = {
+                    uid,
+                    email: userData.email || '',
+                    displayName: `${userData.firstName} ${userData.lastName}` || userData.displayName || '',
+                    firstName: userData.firstName || '',
+                    lastName: userData.lastName || '',
+                    age: userData.age || '',
+                    photoURL: userData.photoURL || '',
+                };
+
+                localStorage.setItem('user', JSON.stringify(userInfo));
+                dispatch(setUser(userInfo));
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await fetchUser(user.uid, dispatch);
+            } else {
+                dispatch(resetUser());
+                localStorage.removeItem('user');
+            }
+        });
+
+        return () => unsubscribe();
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (!auth.currentUser) return;
+
+        if (isOnline) {
+            fetchUser(auth.currentUser.uid, dispatch);
+        } else {
+            const cachedUser = localStorage.getItem('user');
+            cachedUser && dispatch(setUser(JSON.parse(cachedUser)));
+        }
+    }, [dispatch, isOnline]);
+
+    const handleAuthSuccess = async (user: UserInfo, message: string) => {
         const docRef = doc(firestore, 'users', user.uid);
         const docSnap = await getDoc(docRef);
-        const userData = docSnap.data();
+        let userData = docSnap.data();
+
+        if (!userData) {
+            userData = {
+                uid: user.uid,
+                firstName: user.displayName?.split(' ')[0] || '',
+                lastName: user.displayName?.split(' ')[1] || '',
+                age: null,
+                email: user.email || '',
+                photoURL: user.photoURL || '',
+                articles: [],
+            };
+            await setDoc(docRef, userData);
+        }
 
         const userInfo = {
-          uid: user.uid,
-          email: user.email || '',
-          displayName:
-            `${userData?.firstName} ${userData?.lastName}` ||
-            userData?.displayName ||
-            '',
-          photoURL: userData?.photoURL || '',
+            uid: user.uid,
+            email: user.email || '',
+            displayName: `${userData.firstName} ${userData.lastName}`,
+            photoURL: userData.photoURL || '',
+            firstName: userData?.firstName || '',
+            lastName: userData?.lastName || '',
+            age: userData?.age || '',
         };
 
         localStorage.setItem('user', JSON.stringify(userInfo));
+
         dispatch(setUser(userInfo));
-      } else {
-        dispatch(resetUser());
-        localStorage.removeItem('user');
-      }
-    });
 
-    return () => unsubscribe();
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (!navigator.onLine) {
-      const cachedUser = localStorage.getItem('user');
-
-      if (cachedUser) {
-        dispatch(setUser(JSON.parse(cachedUser)));
-      }
-    }
-  }, [dispatch]);
-
-  const handleAuthSuccess = async (user: UserInfo, message: string) => {
-    const docRef = doc(firestore, 'users', user.uid);
-    const docSnap = await getDoc(docRef);
-    let userData = docSnap.data();
-
-    if (!userData) {
-      userData = {
-        uid: user.uid,
-        firstName: user.displayName?.split(' ')[0] || '',
-        lastName: user.displayName?.split(' ')[1] || '',
-        age: null,
-        email: user.email || '',
-        photoURL: user.photoURL || '',
-        articles: [],
-      };
-      await setDoc(docRef, userData);
-    }
-
-    const userInfo = {
-      uid: user.uid,
-      email: user.email || '',
-      displayName: `${userData.firstName} ${userData.lastName}`,
-      photoURL: userData.photoURL || '',
+        dispatch(
+            showNotification({
+                message,
+                severity: 'success',
+            }),
+        );
     };
 
-    localStorage.setItem('user', JSON.stringify(userInfo));
-
-    dispatch(setUser(userInfo));
-
-    dispatch(
-      showNotification({
-        message,
-        severity: 'success',
-      })
-    );
-  };
-
-  const handleAuthError = (error: Error) => {
-    const message = error.code ? getErrorMessage(error.code) : error.message;
-    dispatch(
-      showNotification({
-        message,
-        severity: 'error',
-      })
-    );
-  };
-
-  const signUp = async (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-    age: number
-  ) => {
-    if (!navigator.onLine) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'error',
-        })
-      );
-      return false;
-    }
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      const user = userCredential.user;
-
-      if (user) {
-        await setDoc(doc(firestore, 'users', user.uid), {
-          uid: user.uid,
-          firstName,
-          lastName,
-          age,
-          email,
-          photoURL: '',
-          articles: [],
-        });
-
-        handleAuthSuccess(
-          user,
-          'Your account has been created successfully. Welcome aboard!'
+    const handleAuthError = (error: Error) => {
+        const message = error.message;
+        dispatch(
+            showNotification({
+                message,
+                severity: 'error',
+            }),
         );
+    };
 
-        return true;
-      }
-    } catch (error) {
-      handleAuthError(error);
-    }
-  };
+    const signUp = async (email: string, password: string, firstName: string, lastName: string, age: number) => {
+        if (!isOnline) {
+            dispatch(
+                showNotification({
+                    message: 'No internet connection. Please try again later.',
+                    severity: 'error',
+                }),
+            );
+            return false;
+        }
 
-  const login = async (email: string, password: string) => {
-    if (!navigator.onLine) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Try again later.',
-          severity: 'warning',
-        })
-      );
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-      return;
-    }
+            const user = userCredential.user;
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      handleAuthSuccess(
-        userCredential.user,
-        'You have successfully logged in. Welcome back!'
-      );
-    } catch (error) {
-      handleAuthError(error);
-    }
-  };
+            if (user) {
+                await setDoc(doc(firestore, 'users', user.uid), {
+                    uid: user.uid,
+                    firstName,
+                    lastName,
+                    age,
+                    email,
+                    photoURL: '',
+                    articles: [],
+                });
 
-  const forgotPassword = async (email: string) => {
-    if (!navigator.onLine) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'error',
-        })
-      );
-      return;
-    }
+                handleAuthSuccess(user, 'Your account has been created successfully. Welcome aboard!');
 
-    try {
-      await sendPasswordResetEmail(auth, email);
-      dispatch(
-        showNotification({
-          message:
-            'A password reset email has been sent to your email address. Please check your inbox.',
-          severity: 'success',
-        })
-      );
-    } catch (error) {
-      handleAuthError(error);
-    }
-  };
+                return true;
+            }
+        } catch (error) {
+            handleAuthError(error);
+        }
+    };
 
-  const loginWithProvider = async (
-    provider: GoogleAuthProvider | FacebookAuthProvider,
-    message: string
-  ) => {
-    if (!navigator.onLine) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'error',
-        })
-      );
-      return;
-    }
+    const login = async (email: string, password: string) => {
+        if (!isOnline) {
+            dispatch(
+                showNotification({
+                    message: 'No internet connection. Try again later.',
+                    severity: 'warning',
+                }),
+            );
 
-    try {
-      const userCredential = await signInWithPopup(auth, provider);
-      handleAuthSuccess(userCredential.user, message);
-    } catch (error) {
-      handleAuthError(error);
-    }
-  };
+            return;
+        }
 
-  const loginWithGoogle = () =>
-    loginWithProvider(
-      googleProvider,
-      'You have successfully logged in with Google. Welcome back!'
-    );
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            handleAuthSuccess(userCredential.user, 'You have successfully logged in. Welcome back!');
+        } catch (error) {
+            handleAuthError(error);
+        }
+    };
 
-  const loginWithFacebook = () =>
-    loginWithProvider(
-      facebookProvider,
-      'You have successfully logged in with Facebook. Welcome back!'
-    );
+    const forgotPassword = async (email: string) => {
+        if (!isOnline) {
+            dispatch(
+                showNotification({
+                    message: 'No internet connection. Please try again later.',
+                    severity: 'error',
+                }),
+            );
+            return;
+        }
 
-  const logout = async () => {
-    if (!navigator.onLine) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'warning',
-        })
-      );
-      return;
-    }
+        try {
+            await sendPasswordResetEmail(auth, email);
+            dispatch(
+                showNotification({
+                    message: 'A password reset email has been sent to your email address. Please check your inbox.',
+                    severity: 'success',
+                }),
+            );
+        } catch (error) {
+            handleAuthError(error);
+        }
+    };
 
-    try {
-      await signOut(auth);
-      dispatch(resetUser());
-      localStorage.removeItem('user');
-    } catch (error) {
-      handleAuthError(error);
-    }
-  };
+    const loginWithProvider = async (provider: GoogleAuthProvider | FacebookAuthProvider, message: string) => {
+        if (!isOnline) {
+            dispatch(
+                showNotification({
+                    message: 'No internet connection. Please try again later.',
+                    severity: 'error',
+                }),
+            );
+            return;
+        }
 
-  return {
-    signUp,
-    login,
-    forgotPassword,
-    loginWithGoogle,
-    loginWithFacebook,
-    logout,
-  };
+        try {
+            const userCredential = await signInWithPopup(auth, provider);
+            handleAuthSuccess(userCredential.user, message);
+        } catch (error) {
+            handleAuthError(error);
+        }
+    };
+
+    const loginWithGoogle = () =>
+        loginWithProvider(googleProvider, 'You have successfully logged in with Google. Welcome back!');
+
+    const loginWithFacebook = () =>
+        loginWithProvider(facebookProvider, 'You have successfully logged in with Facebook. Welcome back!');
+
+    const logout = async () => {
+        if (!isOnline) {
+            dispatch(
+                showNotification({
+                    message: 'No internet connection. Please try again later.',
+                    severity: 'warning',
+                }),
+            );
+            return;
+        }
+
+        try {
+            await signOut(auth);
+            dispatch(resetUser());
+            localStorage.removeItem('user');
+        } catch (error) {
+            handleAuthError(error);
+        }
+    };
+
+    return {
+        signUp,
+        login,
+        forgotPassword,
+        loginWithGoogle,
+        loginWithFacebook,
+        logout,
+    };
 };
 
 export default useFirebaseAuth;
