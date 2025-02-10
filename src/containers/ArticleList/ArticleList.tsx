@@ -43,7 +43,7 @@ const ArticleList = () => {
         <Box display="flex" justifyContent="space-between" sx={{ flexDirection: { xs: 'column-reverse', lg: 'row' } }}>
             <Box sx={{ px: 4, py: 3, maxWidth: 840 }}>
                 <Box display="flex" alignItems="center" sx={{ mb: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
-                    <h2>Articles Dashboard</h2>
+                    <h2>Articles Dashboard 1</h2>
                     <Filter setFilter={setFilter} />
                     <Sorting setSortOrder={setSortOrder} />
                 </Box>
