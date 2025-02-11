@@ -1,21 +1,21 @@
 import './Article.scss';
 
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Box, CardActions, Link, Menu, MenuItem } from '@mui/material';
+import { MouseEvent, useState } from 'react';
 
+import { ArticleProps } from '../ArticleForm/ArticleForm';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import { MouseEvent, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import useArticleManagement from '../../hooks/useArticleManagement';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { RootState } from '../../store/store';
-import { ArticleProps } from '../ArticleForm/ArticleForm';
+import Typography from '@mui/material/Typography';
+import useArticleManagement from '../../hooks/useArticleManagement';
+import { useNavigate } from 'react-router-dom';
 import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
+import { useSelector } from 'react-redux';
 
 const ITEM_HEIGHT = 40;
 const MAX_TEXT_LENGTH = 100;
@@ -78,6 +78,7 @@ const Article = ({
             aria-haspopup="true"
             onClick={handleClick}
             className="menu"
+            data-cy="menu-button"
           >
             <MoreHorizIcon sx={{ color: 'white' }} />
           </IconButton>
@@ -99,10 +100,10 @@ const Article = ({
               },
             }}
           >
-            <MenuItem key="edit" onClick={() => handleEdit(id)}>
+            <MenuItem data-cy="menu-button" key="edit" onClick={() => handleEdit(id)}>
               Edit
             </MenuItem>
-            <MenuItem key="delete" onClick={() => handleDelete(id)}>
+            <MenuItem data-cy="delete-button" key="delete" onClick={() => handleDelete(id)}>
               Delete
             </MenuItem>
           </Menu>
