@@ -33,6 +33,7 @@ export const signUpSchema = yup.object().shape({
   age: yup.number().positive().integer().required('Required'),
   password: passwordField.min(8, 'Must be 8 characters long at least'),
   confirmPassword: confirmPasswordField('password'),
+  accept: yup.boolean().oneOf([true], 'You must accept the terms and conditions'),
 });
 
 export const forgotPassSchema = yup.object().shape({
