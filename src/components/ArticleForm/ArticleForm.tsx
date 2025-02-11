@@ -1,15 +1,15 @@
 import { Box, Button, CircularProgress, MenuItem, Select, Typography } from '@mui/material';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import useArticleManagement from '../../hooks/useArticleManagement';
-import { RootState } from '../../store/store';
-import { articleSchema } from '../../utils/schemas';
 import FileUpload from '../FileUpload/FileUpload';
 import Input from '../Input/Input';
+import { RootState } from '../../store/store';
 import Textarea from '../Textarea/Textarea';
+import { articleSchema } from '../../utils/schemas';
+import useArticleManagement from '../../hooks/useArticleManagement';
+import { useSelector } from 'react-redux';
 
 export interface ArticleProps {
   id: string;
@@ -138,6 +138,7 @@ const ArticleForm = () => {
                     color="primary"
                     disabled={isSubmitting || !isValid}
                     disableElevation
+                    data-cy="publish-button"
                   >
                     Publish
                   </Button>
