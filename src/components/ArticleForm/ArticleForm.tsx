@@ -98,6 +98,7 @@ const ArticleForm = () => {
                   sx={{ mb: 3, px: 3, fontSize: 16, width: '100%' }}
                   value={values.category}
                   onChange={(event) => setFieldValue('category', event.target.value)}
+                  data-cy="category"
                 >
                   {categories.map(({ id, title }) => (
                     <MenuItem key={id} value={title}>
