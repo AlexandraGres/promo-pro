@@ -55,14 +55,7 @@ const ArticleList = () => {
           <Filter setFilter={setFilter} />
           <Sorting setSortOrder={setSortOrder} />
         </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            columnGap: 4,
-            justifyContent: 'center',
-          }}
-        >
+        <Box display="flex" justifyContent="space-between" columnGap="4" flexWrap="wrap">
           {loading ? (
             <CircularProgress />
           ) : (
