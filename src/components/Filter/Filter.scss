@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .filter {
   display: flex;
@@ -6,7 +6,7 @@
   margin: 0 30px;
 
   .label {
-    color: $default;
+    color: variables.$default;
     opacity: 0.5;
     font-size: 14px;
     font-weight: 500;
@@ -14,10 +14,10 @@
 
   button {
     font-size: 14px;
-    color: $black;
+    color: variables.$black;
 
     &.open {
-      color: $primary;
+      color: variables.$primary;
     }
   }
 

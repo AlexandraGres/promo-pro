@@ -1,9 +1,9 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .text-divider {
   margin: 30px 0;
   display: flex;
-  color: $secondary;
+  color: variables.$secondary;
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;

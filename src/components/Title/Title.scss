@@ -1,7 +1,7 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .title {
-  color: $black;
+  color: variables.$black;
   font-size: 30px;
   font-weight: 700;
   margin-bottom: 8px;

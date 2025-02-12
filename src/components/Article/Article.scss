@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .article {
   position: relative;
@@ -15,18 +15,18 @@
 
   .tag {
     text-transform: uppercase;
-    color: $secondary;
+    color: variables.$secondary;
     font-size: 13px;
   }
 
   .date {
-    color: $secondary;
+    color: variables.$secondary;
     font-size: 13px;
   }
 
   .title {
     font-size: 21px;
-    color: $black;
+    color: variables.$black;
     font-weight: bold;
     margin-top: 10px;
   }
@@ -38,12 +38,12 @@
 
   .name {
     font-size: 13px;
-    color: $primary;
+    color: variables.$primary;
   }
 
   .read-more {
     font-size: 11px;
-    color: $primary;
+    color: variables.$primary;
     margin-left: auto;
   }
 }

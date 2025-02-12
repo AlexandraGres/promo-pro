@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .textarea {
   display: flex;
@@ -6,14 +6,14 @@
   position: relative;
 
   label {
-    color: $secondary;
+    color: variables.$secondary;
     margin-bottom: 10px;
     font-weight: 500;
     font-weight: 'Roboto';
   }
 
   textarea {
-    background: $background;
+    background: variables.$background;
     width: 100%;
     border-radius: 3px;
     padding: 18px 32px;
@@ -24,7 +24,7 @@
     min-height: 240px;
 
     &:focus {
-      border: solid 1px $primary;
+      border: solid 1px variables.$primary;
       outline: none;
     }
   }
@@ -36,7 +36,7 @@
   }
 
   span {
-    color: $secondary;
+    color: variables.$secondary;
     font-size: 13px;
     margin-top: -25px;
     margin-bottom: 27px;

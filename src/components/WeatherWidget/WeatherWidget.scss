@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .weather {
   max-width: 320px;
@@ -18,7 +18,7 @@
   p {
     margin: 0;
     font-size: 14px;
-    color: $default;
+    color: variables.$default;
   }
 
   sup {
@@ -28,7 +28,7 @@
 
   svg {
     font-size: 60px;
-    color: $dropdown;
+    color: variables.$dropdown;
     opacity: 0.3;
     margin-left: 30px;
   }

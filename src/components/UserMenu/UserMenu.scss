@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .user-menu {
   display: flex;
@@ -6,11 +6,11 @@
   margin-left: auto;
 
   button {
-    color: $black;
+    color: variables.$black;
     font-size: 14px;
 
     &.open {
-      color: $primary;
+      color: variables.$primary;
     }
   }
 

@@ -1,4 +1,4 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .input {
   display: flex;
@@ -6,13 +6,13 @@
   position: relative;
 
   label {
-    color: $secondary;
+    color: variables.$secondary;
     margin-bottom: 10px;
     font-weight: 500;
   }
 
   input {
-    background: $background;
+    background: variables.$background;
     width: 100%;
     border-radius: 3px;
     padding: 18px 32px;
@@ -20,7 +20,7 @@
     margin-bottom: 27px;
 
     &:focus {
-      border: solid 1px $primary;
+      border: solid 1px variables.$primary;
       outline: none;
     }
 
@@ -28,7 +28,7 @@
       width: 24px;
       height: 24px;
       border: 1px solid #eeeeef;
-      background: $background;
+      background: variables.$background;
       margin-right: 8px;
     }
   }
@@ -44,7 +44,7 @@
   }
 
   span {
-    color: $secondary;
+    color: variables.$secondary;
     font-size: 13px;
     margin-top: -25px;
     margin-bottom: 27px;

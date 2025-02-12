@@ -1,11 +1,11 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .terms {
   padding-bottom: 100px;
 
   header {
     background: #040d32;
-    color: $white;
+    color: variables.$white;
     padding-bottom: 30px;
 
     .logo {

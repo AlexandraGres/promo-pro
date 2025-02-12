@@ -1,14 +1,14 @@
-@import '../../variables.scss';
+@use '../../variables';
 
 .sorting {
   display: flex;
   align-items: center;
-  background: $white;
+  background: variables.$white;
   border-radius: 3px;
   padding-left: 12px;
 
   .label {
-    color: $default;
+    color: variables.$default;
     opacity: 0.5;
     font-size: 14px;
     font-weight: 500;
@@ -16,11 +16,11 @@
 
   button {
     font-size: 14px;
-    color: $black;
+    color: variables.$black;
     padding: 10px 4px;
 
     &.open {
-      color: $primary;
+      color: variables.$primary;
     }
 
     span {
@@ -30,7 +30,7 @@
         &::before {
           content: '';
           position: absolute;
-          background: $background;
+          background: variables.$background;
           height: 50px;
           width: 1px;
           top: -13px;

@@ -1,15 +1,15 @@
-import { useSelector } from 'react-redux';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
-import Notification from './components/Notification/Notification';
-import { OnlineStatusProvider } from './components/Providers/OnlineStatusProvider';
 import Dashboard from './containers/Dashboard/Dashboard';
 import ForgotPassword from './containers/ForgotPassword/ForgotPassword';
 import Login from './containers/Login/Login';
 import NotFound from './containers/NotFound/NotFound';
+import Notification from './components/Notification/Notification';
+import { OnlineStatusProvider } from './components/Providers/OnlineStatusProvider';
+import { RootState } from './store/store';
 import SignUp from './containers/SignUp/SignUp';
 import Terms from './containers/Terms/Terms';
-import { RootState } from './store/store';
+import { useSelector } from 'react-redux';
 
 function App() {
   const { user } = useSelector((state: RootState) => state.auth);
