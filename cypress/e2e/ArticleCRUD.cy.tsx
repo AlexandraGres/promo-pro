@@ -30,7 +30,8 @@ describe('Article CRUD Test', () => {
     cy.get('[data-cy=edit-button]').should('be.visible').click();
     cy.contains('Edit Article', { timeout: 10000 }).should('be.visible');
     cy.get('input[name="title"]')
-      .clear()
+      .clear({ force: true })
+      .type('{selectall}{backspace}')
       .type('Cypress Test Article Updated', { delay: 100 })
       .should('have.value', 'Cypress Test Article Updated');
     cy.get('button[type="submit"]').click();
