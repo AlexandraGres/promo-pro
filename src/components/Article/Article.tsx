@@ -100,7 +100,7 @@ const Article = ({
               },
             }}
           >
-            <MenuItem data-cy="menu-button" key="edit" onClick={() => handleEdit(id)}>
+            <MenuItem data-cy="edit-button" key="edit" onClick={() => handleEdit(id)}>
               Edit
             </MenuItem>
             <MenuItem data-cy="delete-button" key="delete" onClick={() => handleDelete(id)}>

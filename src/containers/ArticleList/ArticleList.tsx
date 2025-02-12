@@ -101,6 +101,7 @@ const ArticleList = () => {
           startIcon={<AddIcon />}
           onClick={handleClick}
           disableElevation
+          data-cy="add-article"
         >
           Add Article
         </Button>

@@ -39,6 +39,7 @@
     "build": "react-scripts build",
     "lint": "npx eslint 'src/**/*.{ts,tsx}' --fix",
     "test": "jest",
+    "cy": "npx cypress run",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

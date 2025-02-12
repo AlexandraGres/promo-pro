@@ -27,8 +27,14 @@ jobs:
       - name: Run Lint  
         run: npm run lint
         
-      - name: Run Unit Tests (Jest)  
+      - name: Run Unit Tests 
         run: npm run test
+
+      - name: Run E2E Tests (Cypress)  
+        uses: cypress-io/github-action@v6  
+        with:  
+          start: npm start  
+          wait-on: http://localhost:3000
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools 
