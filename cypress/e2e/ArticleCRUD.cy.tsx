@@ -32,6 +32,7 @@ describe('Article CRUD Test', () => {
     cy.contains('Edit Article', { timeout: 10000 }).should('be.visible');
     cy.get('input[name="title"]')
       .clear()
+      .focus()
       .type('Updated', { delay: 100 })
       .should('have.value', 'Cypress Test ArticleUpdated');
     cy.get('button[type="submit"]').click();
