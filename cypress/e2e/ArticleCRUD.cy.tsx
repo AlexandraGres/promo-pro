@@ -29,20 +29,22 @@ describe('Article CRUD Test', () => {
     cy.wait(1000);
     cy.get('[data-cy=menu-button]', { timeout: 10000 }).should('be.visible').click();
     cy.get('[data-cy=edit-button]').should('be.visible').click();
+    cy.wait(1000);
     cy.contains('Edit Article', { timeout: 10000 }).should('be.visible');
     cy.get('input[name="title"]')
+      .wait(500)
       .clear()
-      .focus()
-      .type('Updated', { delay: 100 })
-      .should('have.value', 'Cypress Test ArticleUpdated');
+      .type('Cypress Test Article Updated', { delay: 100 })
+      .should('have.value', 'Cypress Test Article Updated');
     cy.get('button[type="submit"]').click();
-    cy.contains('Cypress Test ArticleUpdated', { timeout: 10000 }).should('be.visible');
+    cy.wait(1000);
+    cy.contains('Cypress Test Article Updated', { timeout: 10000 }).should('be.visible');
   });
 
   it('should delete the article', () => {
     cy.wait(1000);
     cy.get('[data-cy=menu-button]', { timeout: 10000 }).click();
     cy.get('[data-cy=delete-button]').click();
-    cy.contains('Cypress Test ArticleUpdated').should('not.exist');
+    cy.contains('Cypress Test Article Updated').should('not.exist');
   });
 });
