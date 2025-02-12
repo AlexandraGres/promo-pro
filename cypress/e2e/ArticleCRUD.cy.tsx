@@ -3,16 +3,20 @@ describe('Article CRUD Test', () => {
     cy.session('loginSession', () => {
       cy.login();
     });
-    cy.visit('/', { timeout: 10000 });
+    cy.visit('/');
   });
 
-  it('should validate form fields and create an article', () => {
+  it('should validate form fields', () => {
     cy.get('[data-cy=add-article]', { timeout: 10000 }).should('be.visible').click();
     cy.contains('Add New Article', { timeout: 10000 }).should('be.visible');
     cy.get('[data-cy=publish-button]').click();
     cy.contains('Title is required').should('be.visible');
     cy.contains('Text is required').should('be.visible');
+  });
 
+  it('should create the article', () => {
+    cy.wait(1000);
+    cy.get('[data-cy=add-article]', { timeout: 10000 }).should('be.visible').click();
     cy.get('input[name="title"]').type('Cypress Test Article');
     cy.get('textarea[name="text"]').type('This is a test article created using Cypress.');
     cy.get('[data-cy=category]').click();
