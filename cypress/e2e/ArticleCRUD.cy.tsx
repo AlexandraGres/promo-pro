@@ -35,7 +35,7 @@ describe('Article CRUD Test', () => {
     cy.get('[data-cy=edit-button]').click();
 
     cy.contains('Edit Article', { timeout: 10000 }).should('be.visible');
-    cy.get('input[name="title"]').clear().type(' Updated');
+    cy.get('input[name="title"]').clear().type('Cypress Test Article Updated', { timeout: 10000 });
     cy.get('button[type="submit"]').click();
 
     cy.contains('Cypress Test Article Updated', { timeout: 10000 }).should('be.visible');
