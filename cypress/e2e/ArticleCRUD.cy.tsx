@@ -1,11 +1,8 @@
 describe('Article CRUD Test', () => {
-  before(() => {
+  beforeEach(() => {
     cy.session('loginSession', () => {
       cy.login();
     });
-  });
-
-  beforeEach(() => {
     cy.visit('/', { timeout: 10000 });
   });
 
