@@ -35,6 +35,7 @@ jobs:
         with:
           build: npm run build
           start: npm start
+          browser: electron
 
       - name: Install Firebase CLI
         run: npm install -g firebase-tools 
