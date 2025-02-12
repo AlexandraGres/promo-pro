@@ -26,10 +26,13 @@ describe('Article CRUD Test', () => {
   });
 
   it('should edit the article', () => {
-    cy.get('[data-cy=menu-button]').click();
-    cy.get('[data-cy=edit-button]').click();
+    cy.get('[data-cy=menu-button]', { timeout: 10000 }).should('be.visible').click();
+    cy.get('[data-cy=edit-button]').should('be.visible').click();
     cy.contains('Edit Article', { timeout: 10000 }).should('be.visible');
-    cy.get('input[name="title"]').clear().type('Cypress Test Article Updated', { timeout: 10000 });
+    cy.get('input[name="title"]')
+      .clear()
+      .type('Cypress Test Article Updated', { delay: 100 })
+      .should('have.value', 'Cypress Test Article Updated');
     cy.get('button[type="submit"]').click();
     cy.contains('Cypress Test Article Updated', { timeout: 10000 }).should('be.visible');
   });
