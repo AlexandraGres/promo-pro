@@ -35,6 +35,7 @@ describe('Article CRUD Test', () => {
   });
 
   it('should delete the article', () => {
+    cy.wait(1000);
     cy.get('[data-cy=menu-button]', { timeout: 10000 }).click();
     cy.get('[data-cy=delete-button]').click();
     cy.contains('Cypress Test ArticleUpdated').should('not.exist');
