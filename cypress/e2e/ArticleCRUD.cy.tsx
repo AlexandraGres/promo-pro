@@ -22,6 +22,7 @@ describe('Article CRUD Test', () => {
   });
 
   it('should edit the article', () => {
+    cy.contains('Cypress Test Article', { timeout: 10000 }).should('be.visible');
     cy.get('[data-cy=menu-button]', { timeout: 10000 }).should('be.visible').click();
     cy.get('[data-cy=edit-button]').should('be.visible').click();
     cy.contains('Edit Article', { timeout: 10000 }).should('be.visible');
