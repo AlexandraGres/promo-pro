@@ -17,6 +17,7 @@ const STATIC_ASSETS = [
   '/logo-white.svg',
   '/arrow_l.svg',
   '/dashboard.svg',
+  '/dashboard-disabled.svg',
   '/manifest.json',
   '/upload.svg',
   'post-img.png',
@@ -27,7 +28,7 @@ this.addEventListener('install', (event) => {
     caches.open(CACHE_NAME).then((cache) => {
       console.log('[Service Worker] Caching static assets');
       return cache.addAll(STATIC_ASSETS);
-    })
+    }),
   );
 });
 
@@ -40,9 +41,9 @@ this.addEventListener('activate', (event) => {
             console.log('[Service Worker] Deleting old cache:', cache);
             return caches.delete(cache);
           }
-        })
+        }),
       );
-    })
+    }),
   );
 });
 
@@ -60,12 +61,10 @@ this.addEventListener('fetch', (event) => {
             });
           })
         );
-      })
+      }),
     );
   } else {
     // Default fetch behavior (for HTML/API calls)
-    event.respondWith(
-      fetch(event.request).catch(() => caches.match(event.request))
-    );
+    event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
   }
 });
