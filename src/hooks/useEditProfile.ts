@@ -6,7 +6,6 @@ import { setDisplayName, setPhotoURL } from '../store/auth/authSlice';
 
 import { showNotification } from '../store/notification/notificationSlice';
 import { useDispatch } from 'react-redux';
-import { useOnlineStatus } from '../components/Providers/OnlineStatusProvider';
 
 interface User {
   firstName?: string;
@@ -16,20 +15,8 @@ interface User {
 
 const useEditProfile = () => {
   const dispatch = useDispatch();
-  const isOnline = useOnlineStatus();
 
   const updateUserInfo = async (uid: string, userInfo: User) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection.',
-          severity: 'warning',
-        }),
-      );
-
-      return;
-    }
-
     try {
       const docRef = doc(firestore, 'users', uid);
       const docSnap = await getDoc(docRef);
@@ -69,17 +56,6 @@ const useEditProfile = () => {
   };
 
   const updateUserAvatar = async (uid: string, file: File) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection.',
-          severity: 'warning',
-        }),
-      );
-
-      return;
-    }
-
     try {
       const storageRef = ref(storage, `users/${file.name}`);
       const uploadResult = await uploadBytes(storageRef, file);
@@ -112,17 +88,6 @@ const useEditProfile = () => {
   };
 
   const changeUserPassword = async (oldPassword: string, newPassword: string) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection.',
-          severity: 'warning',
-        }),
-      );
-
-      return;
-    }
-
     try {
       const user = auth.currentUser;
 

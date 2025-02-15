@@ -11,9 +11,11 @@ import TextDivider from '../../components/TextDivider/TextDivider';
 import Title from '../../components/Title/Title';
 import { loginSchema } from '../../utils/schemas';
 import useFirebaseAuth from '../../hooks/useFirebaseAuth';
+import { useOnlineStatus } from '../../components/Providers/OnlineStatusProvider';
 
 const Login: FC = () => {
   const { login } = useFirebaseAuth();
+  const isOnline = useOnlineStatus();
 
   return (
     <Box className="login">
@@ -53,7 +55,7 @@ const Login: FC = () => {
                   </Link>
                 </Box>
                 <Button
-                  disabled={isSubmitting || !isValid}
+                  disabled={isSubmitting || !isValid || !isOnline}
                   type="submit"
                   variant="contained"
                   disableElevation

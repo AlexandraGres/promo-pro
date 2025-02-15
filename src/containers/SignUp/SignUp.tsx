@@ -12,6 +12,7 @@ import Title from '../../components/Title/Title';
 import { signUpSchema } from '../../utils/schemas';
 import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 import { useNavigate } from 'react-router-dom';
+import { useOnlineStatus } from '../../components/Providers/OnlineStatusProvider';
 
 interface SignUpProps {
   email: string;
@@ -26,6 +27,7 @@ interface SignUpProps {
 const SignUp: FC = () => {
   const { signUp } = useFirebaseAuth();
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
 
   const initialValues: SignUpProps = {
     firstName: '',
@@ -107,7 +109,7 @@ const SignUp: FC = () => {
                   </Link>
                 </Box>
                 <Button
-                  disabled={isSubmitting || !isValid}
+                  disabled={isSubmitting || !isValid || !isOnline}
                   type="submit"
                   variant="contained"
                   disableElevation

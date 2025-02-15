@@ -6,11 +6,13 @@ import FileUpload from '../FileUpload/FileUpload';
 import { RootState } from '../../store/store';
 import useEditProfile from '../../hooks/useEditProfile';
 import { useNavigate } from 'react-router-dom';
+import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
 import { useSelector } from 'react-redux';
 import { userAvatarSchema } from '../../utils/schemas';
 
 const UserAvatarForm: FC = () => {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
   const { user } = useSelector((state: RootState) => state.auth);
   const uid = user?.uid;
   const { updateUserAvatar } = useEditProfile();
@@ -45,7 +47,7 @@ const UserAvatarForm: FC = () => {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={isSubmitting || !isValid || !values.file}
+              disabled={isSubmitting || !isValid || !isOnline}
               disableElevation
             >
               Save

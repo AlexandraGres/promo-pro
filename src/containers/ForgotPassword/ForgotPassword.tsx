@@ -9,9 +9,11 @@ import Input from '../../components/Input/Input';
 import Title from '../../components/Title/Title';
 import { forgotPassSchema } from '../../utils/schemas';
 import useFirebaseAuth from '../../hooks/useFirebaseAuth';
+import { useOnlineStatus } from '../../components/Providers/OnlineStatusProvider';
 
 const ForgotPassword: FC = () => {
   const { forgotPassword } = useFirebaseAuth();
+  const isOnline = useOnlineStatus();
 
   return (
     <Box className="forgot-pass">
@@ -38,7 +40,7 @@ const ForgotPassword: FC = () => {
                   placeholder="Enter your email address"
                 />
                 <Button
-                  disabled={isSubmitting || !isValid}
+                  disabled={isSubmitting || !isValid || !isOnline}
                   type="submit"
                   variant="contained"
                   disableElevation

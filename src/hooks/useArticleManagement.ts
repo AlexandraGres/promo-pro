@@ -78,19 +78,7 @@ const useArticleManagement = () => {
   }, [isOnline, fetchArticles, dispatch]);
 
   const saveArticle = async (id: string | undefined, values: ArticleProps, user: User) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection.',
-          severity: 'warning',
-        }),
-      );
-
-      return;
-    }
-
     setLoading(true);
-
     const { category, createdAt, file, title, text } = values;
 
     let coverPhotoUrl = values.coverPhotoUrl;

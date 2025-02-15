@@ -135,16 +135,6 @@ const useFirebaseAuth = () => {
     lastName: string,
     age: number,
   ) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'error',
-        }),
-      );
-      return false;
-    }
-
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -171,17 +161,6 @@ const useFirebaseAuth = () => {
   };
 
   const login = async (email: string, password: string) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Try again later.',
-          severity: 'warning',
-        }),
-      );
-
-      return;
-    }
-
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       handleAuthSuccess(userCredential.user, 'You have successfully logged in. Welcome back!');
@@ -191,16 +170,6 @@ const useFirebaseAuth = () => {
   };
 
   const forgotPassword = async (email: string) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'error',
-        }),
-      );
-      return;
-    }
-
     try {
       await sendPasswordResetEmail(auth, email);
       dispatch(
@@ -219,16 +188,6 @@ const useFirebaseAuth = () => {
     provider: GoogleAuthProvider | FacebookAuthProvider,
     message: string,
   ) => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'error',
-        }),
-      );
-      return;
-    }
-
     try {
       const userCredential = await signInWithPopup(auth, provider);
       handleAuthSuccess(userCredential.user, message);
@@ -247,16 +206,6 @@ const useFirebaseAuth = () => {
     );
 
   const logout = async () => {
-    if (!isOnline) {
-      dispatch(
-        showNotification({
-          message: 'No internet connection. Please try again later.',
-          severity: 'warning',
-        }),
-      );
-      return;
-    }
-
     try {
       await signOut(auth);
       dispatch(resetUser());

@@ -6,6 +6,7 @@ import Input from '../Input/Input';
 import { RootState } from '../../store/store';
 import useEditProfile from '../../hooks/useEditProfile';
 import { useNavigate } from 'react-router-dom';
+import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
 import { useSelector } from 'react-redux';
 import { userInfoSchema } from '../../utils/schemas';
 
@@ -17,6 +18,7 @@ interface UserInfoFormValues {
 
 const UserInfoForm: FC = () => {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
   const { user } = useSelector((state: RootState) => state.auth);
   const uid = user?.uid;
   const { updateUserInfo } = useEditProfile();
@@ -63,7 +65,7 @@ const UserInfoForm: FC = () => {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={!isValid || isSubmitting}
+              disabled={!isValid || isSubmitting || !isOnline}
               disableElevation
             >
               Save

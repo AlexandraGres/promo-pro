@@ -6,6 +6,7 @@ import Input from '../Input/Input';
 import { changePasswordSchema } from '../../utils/schemas';
 import useEditProfile from '../../hooks/useEditProfile';
 import { useNavigate } from 'react-router-dom';
+import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
 
 const initialValues = {
   oldPassword: '',
@@ -15,6 +16,7 @@ const initialValues = {
 
 const UserPasswordForm: FC = () => {
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
   const { changeUserPassword } = useEditProfile();
 
   return (
@@ -64,7 +66,7 @@ const UserPasswordForm: FC = () => {
               type="submit"
               variant="contained"
               color="primary"
-              disabled={isSubmitting || !isValid}
+              disabled={isSubmitting || !isValid || !isOnline}
               disableElevation
             >
               Save

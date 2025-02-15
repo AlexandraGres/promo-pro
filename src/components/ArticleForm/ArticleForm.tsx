@@ -9,6 +9,7 @@ import { RootState } from '../../store/store';
 import Textarea from '../Textarea/Textarea';
 import { articleSchema } from '../../utils/schemas';
 import useArticleManagement from '../../hooks/useArticleManagement';
+import { useOnlineStatus } from '../Providers/OnlineStatusProvider';
 import { useSelector } from 'react-redux';
 
 export interface ArticleProps {
@@ -48,6 +49,7 @@ const CATEGORIES = [
 
 const ArticleForm: FC = () => {
   const { id } = useParams<{ id: string }>();
+  const isOnline = useOnlineStatus();
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const { saveArticle, fetchArticleById, loading } = useArticleManagement();
@@ -120,7 +122,7 @@ const ArticleForm: FC = () => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                disabled={isSubmitting || !isValid}
+                disabled={isSubmitting || !isValid || !isOnline}
                 disableElevation
                 data-cy="publish-button"
               >
