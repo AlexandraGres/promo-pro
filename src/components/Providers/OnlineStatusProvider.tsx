@@ -1,11 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { FC, ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
 import { showNotification } from '../../store/notification/notificationSlice';
+import { useDispatch } from 'react-redux';
 
 const OnlineStatusContext = createContext<boolean>(navigator.onLine);
 
-export const OnlineStatusProvider = ({ children }: { children: React.ReactNode }) => {
+export const OnlineStatusProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const dispatch = useDispatch();
 
@@ -19,6 +19,7 @@ export const OnlineStatusProvider = ({ children }: { children: React.ReactNode }
         }),
       );
     };
+
     const handleOffline = () => {
       setIsOnline(false);
       dispatch(

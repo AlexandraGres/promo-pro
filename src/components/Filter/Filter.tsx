@@ -1,10 +1,11 @@
 import './Filter.scss';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
-import { MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useCallback, useState } from 'react';
 
-const categories = [
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
+const CATEGORIES = [
   { id: 0, title: 'All Categories' },
   { id: 1, title: 'Productivity' },
   { id: 2, title: 'Media' },
@@ -16,19 +17,23 @@ interface FilterProps {
   setFilter: (filter: string) => void;
 }
 
-const Filter = ({ setFilter }: FilterProps) => {
+const Filter: FC<FilterProps> = ({ setFilter }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [category, setCategory] = useState('All Categories');
+  const [category, setSelectedCategory] = useState(CATEGORIES[0].title);
   const open = Boolean(anchorEl);
 
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
+  const handleClick = useCallback((event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-  };
-  const handleClose = (category: string) => {
-    setFilter(category);
-    setCategory(category);
-    setAnchorEl(null);
-  };
+  }, []);
+
+  const handleClose = useCallback(
+    (category: string) => {
+      setFilter(category);
+      setSelectedCategory(category);
+      setAnchorEl(null);
+    },
+    [setFilter],
+  );
 
   return (
     <Box className="filter">
@@ -36,26 +41,14 @@ const Filter = ({ setFilter }: FilterProps) => {
       <Button
         id="show-button"
         className={open ? 'open' : ''}
-        aria-controls={open ? 'filter' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        disableElevation
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
         variant="text"
       >
         {category}
       </Button>
-      <Menu
-        id="filter"
-        MenuListProps={{
-          'aria-labelledby': 'show-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={() => setAnchorEl(null)}
-      >
-        {categories.map(({ id, title }) => (
+      <Menu id="filter" anchorEl={anchorEl} open={open} onClose={() => setAnchorEl(null)}>
+        {CATEGORIES.map(({ id, title }) => (
           <MenuItem key={id} onClick={() => handleClose(title)} disableRipple>
             {title}
           </MenuItem>

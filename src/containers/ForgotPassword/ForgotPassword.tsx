@@ -4,12 +4,13 @@ import { Box, Button, Container, Link } from '@mui/material';
 import { Form, Formik } from 'formik';
 
 import BgImage from '../../components/BgImage/BgImage';
+import { FC } from 'react';
 import Input from '../../components/Input/Input';
 import Title from '../../components/Title/Title';
-import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 import { forgotPassSchema } from '../../utils/schemas';
+import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 
-const ForgotPassword = () => {
+const ForgotPassword: FC = () => {
   const { forgotPassword } = useFirebaseAuth();
 
   return (

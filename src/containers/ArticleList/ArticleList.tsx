@@ -1,4 +1,5 @@
 import { Box, Button, CircularProgress } from '@mui/material';
+import { FC, useState } from 'react';
 import Sorting, { SortOrder } from '../../components/Sorting/Sorting';
 
 import AddIcon from '@mui/icons-material/Add';
@@ -9,12 +10,10 @@ import WeatherWidget from '../../components/WeatherWidget/WeatherWidget';
 import useArticleManagement from '../../hooks/useArticleManagement';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
 
-const ArticleList = () => {
+const ArticleList: FC = () => {
   const { loading } = useArticleManagement();
   const { articles, searchQuery } = useSelector((state: RootState) => state.articles);
-
   const [filter, setFilter] = useState<string>('All Categories');
   const [sortOrder, setSortOrder] = useState<SortOrder>('Newest');
   const navigate = useNavigate();
@@ -35,9 +34,7 @@ const ArticleList = () => {
           return sortOrder === 'Ascending' ? comparison : -comparison;
         });
 
-  const handleClick = () => {
-    navigate('/add-article');
-  };
+  const handleClick = () => navigate('/add-article');
 
   return (
     <Box
@@ -55,7 +52,13 @@ const ArticleList = () => {
           <Filter setFilter={setFilter} />
           <Sorting setSortOrder={setSortOrder} />
         </Box>
-        <Box display="flex" justifyContent="space-between" columnGap="4" flexWrap="wrap">
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          columnGap="4"
+          flexWrap="wrap"
+          sx={{ minWidth: { xl: '776px' } }}
+        >
           {loading ? (
             <CircularProgress />
           ) : (

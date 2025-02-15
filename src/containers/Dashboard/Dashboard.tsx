@@ -1,28 +1,25 @@
 import './Dashboard.scss';
 
-import MenuIcon from '@mui/icons-material/Menu';
 import { Box, Drawer, IconButton } from '@mui/material';
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import ArticleForm from '../../components/ArticleForm/ArticleForm';
+import ArticleList from '../ArticleList/ArticleList';
 import EditUser from '../../components/EditUser/EditUser';
+import MenuIcon from '@mui/icons-material/Menu';
 import Navbar from '../../components/Navbar/Navbar';
 import Sidebar from '../../components/Sidebar/Sidebar';
-import ArticleList from '../ArticleList/ArticleList';
 
-const Dashboard = () => {
+const DRAWER_WIDTH = 230;
+
+const Dashboard: FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    setMobileOpen(false);
-  };
+  const handleDrawerClose = () => setMobileOpen(false);
 
-  const handleDrawerTransitionEnd = () => {
-    setIsClosing(false);
-  };
+  const handleDrawerTransitionEnd = () => setIsClosing(false);
 
   const handleDrawerToggle = () => {
     if (!isClosing) {
@@ -42,7 +39,7 @@ const Dashboard = () => {
         }}
         sx={{
           display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 230 },
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: DRAWER_WIDTH },
         }}
       >
         <Sidebar />
@@ -53,7 +50,7 @@ const Dashboard = () => {
           display: { xs: 'none', md: 'block' },
           '& .MuiDrawer-paper': {
             boxSizing: 'border-box',
-            width: 230,
+            width: DRAWER_WIDTH,
             position: 'relative',
             border: 'none',
           },

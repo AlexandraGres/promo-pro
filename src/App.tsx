@@ -16,8 +16,8 @@ function App() {
   const { message, severity, show } = useSelector((state: RootState) => state.notification);
 
   return (
-    <OnlineStatusProvider>
-      <Router>
+    <Router>
+      <OnlineStatusProvider>
         {show && <Notification message={message} severity={severity} show={show} />}
         <Routes>
           {user ? (
@@ -29,17 +29,17 @@ function App() {
             </>
           ) : (
             <>
-              <Route path="/*" element={<Login />} />
-              <Route path={'/login'} element={<Login />} />
+              <Route path="/" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path={'/sign-up'} element={<SignUp />} />
               <Route path={'/forgot-pass'} element={<ForgotPassword />} />
+              <Route path="*" element={<NotFound />} />
             </>
           )}
           <Route path={'/terms'} element={<Terms />} />
-          <Route path="*" element={<NotFound />} />
         </Routes>
-      </Router>
-    </OnlineStatusProvider>
+      </OnlineStatusProvider>
+    </Router>
   );
 }
 

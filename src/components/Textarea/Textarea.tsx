@@ -1,5 +1,6 @@
 import './Textarea.scss';
 
+import { FC } from 'react';
 import { useField } from 'formik';
 
 interface TextareaProps {
@@ -8,7 +9,7 @@ interface TextareaProps {
   placeholder?: string;
 }
 
-const Textarea = ({ label, ...props }: TextareaProps) => {
+const Textarea: FC<TextareaProps> = ({ label, ...props }) => {
   const [field, { touched, error }] = useField(props);
 
   return (

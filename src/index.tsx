@@ -2,10 +2,10 @@ import './index.scss';
 
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
+import App from './App';
+import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { store } from './store/store';
 import theme from './theme';

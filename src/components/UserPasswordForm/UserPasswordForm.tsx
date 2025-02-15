@@ -1,10 +1,11 @@
 import { Box, Button } from '@mui/material';
 import { Form, Formik } from 'formik';
 
-import { useNavigate } from 'react-router-dom';
-import useEditProfile from '../../hooks/useEditProfile';
-import { changePasswordSchema } from '../../utils/schemas';
+import { FC } from 'react';
 import Input from '../Input/Input';
+import { changePasswordSchema } from '../../utils/schemas';
+import useEditProfile from '../../hooks/useEditProfile';
+import { useNavigate } from 'react-router-dom';
 
 const initialValues = {
   oldPassword: '',
@@ -12,7 +13,7 @@ const initialValues = {
   confirmPassword: '',
 };
 
-const UserPasswordForm = () => {
+const UserPasswordForm: FC = () => {
   const navigate = useNavigate();
   const { changeUserPassword } = useEditProfile();
 
@@ -48,27 +49,18 @@ const UserPasswordForm = () => {
             type="password"
             placeholder="Enter your new password again"
           />
-
           <Box display="flex" mt={2}>
             <Button
               variant="outlined"
               color="secondary"
-              sx={{
-                fontSize: 14,
-                py: 1,
-                px: 5,
-                mr: 3,
-              }}
+              sx={{ fontSize: 14, py: 1, px: 5, mr: 3 }}
               onClick={() => navigate('/')}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
-              sx={{
-                fontSize: 14,
-                py: 1,
-                px: 5,
-              }}
+              sx={{ fontSize: 14, py: 1, px: 5 }}
               type="submit"
               variant="contained"
               color="primary"

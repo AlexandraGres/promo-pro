@@ -1,16 +1,19 @@
 import './Sorting.scss';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Box, Button, Menu, MenuItem } from '@mui/material';
-import { MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 
-interface SortingProps {
-  setSortOrder: (order: 'Ascending' | 'Descending' | 'Newest') => void;
-}
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 export type SortOrder = 'Ascending' | 'Descending' | 'Newest';
 
-const Sorting = ({ setSortOrder }: SortingProps) => {
+interface SortingProps {
+  setSortOrder: (order: SortOrder) => void;
+}
+
+const sortOptions: SortOrder[] = ['Ascending', 'Descending', 'Newest'];
+
+const Sorting: FC<SortingProps> = ({ setSortOrder }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [sortOrder, setSortOrderState] = useState<SortOrder>('Newest');
   const open = Boolean(anchorEl);
@@ -19,10 +22,14 @@ const Sorting = ({ setSortOrder }: SortingProps) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (order: SortOrder) => {
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSortChange = (order: SortOrder) => {
     setSortOrder(order);
     setSortOrderState(order);
-    setAnchorEl(null);
+    handleMenuClose();
   };
 
   return (
@@ -31,9 +38,6 @@ const Sorting = ({ setSortOrder }: SortingProps) => {
       <Button
         id="show-button"
         className={open ? 'open' : ''}
-        aria-controls={open ? 'Sorting' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
         disableElevation
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
@@ -41,24 +45,12 @@ const Sorting = ({ setSortOrder }: SortingProps) => {
       >
         {sortOrder}
       </Button>
-      <Menu
-        id="Sorting"
-        MenuListProps={{
-          'aria-labelledby': 'show-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={() => setAnchorEl(null)}
-      >
-        <MenuItem onClick={() => handleClose('Ascending')} disableRipple>
-          Ascending
-        </MenuItem>
-        <MenuItem onClick={() => handleClose('Descending')} disableRipple>
-          Descending
-        </MenuItem>
-        <MenuItem onClick={() => handleClose('Newest')} disableRipple>
-          Newest
-        </MenuItem>
+      <Menu id="Sorting" anchorEl={anchorEl} open={open} onClose={handleMenuClose}>
+        {sortOptions.map((option) => (
+          <MenuItem key={option} onClick={() => handleSortChange(option)} disableRipple>
+            {option}
+          </MenuItem>
+        ))}
       </Menu>
     </Box>
   );

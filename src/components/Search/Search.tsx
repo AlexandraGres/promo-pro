@@ -1,13 +1,13 @@
 import './Search.scss';
 
+import { ChangeEvent, FC } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Box } from '@mui/material';
-import { ChangeEvent } from 'react';
 import { RootState } from '../../store/store';
 import { setSearchQuery } from '../../store/articles/articleSlice';
 
-const Search = () => {
+const Search: FC = () => {
   const dispatch = useDispatch();
   const searchQuery = useSelector((state: RootState) => state.articles.searchQuery);
 

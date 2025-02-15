@@ -1,14 +1,14 @@
 import './UserMenu.scss';
 
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Avatar, Box, Button, Menu, MenuItem } from '@mui/material';
-import { MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { RootState } from '../../store/store';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-const UserMenu = () => {
+const UserMenu: FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -32,32 +32,22 @@ const UserMenu = () => {
       <Avatar
         className={open ? 'open' : ''}
         src={user?.photoURL}
+        alt="User Avatar"
         sx={{ mx: 1, height: 48, width: 48 }}
       />
 
       <Button
         id="profile-button"
         className={open ? 'open' : ''}
-        aria-controls={open ? 'user-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
         disableElevation
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
         variant="text"
       >
-        {user?.displayName}
+        {user?.displayName || 'User'}
       </Button>
 
-      <Menu
-        id="user-menu"
-        MenuListProps={{
-          'aria-labelledby': 'profile-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
+      <Menu id="user-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={handleNavigation} disableRipple>
           Edit Profile
         </MenuItem>

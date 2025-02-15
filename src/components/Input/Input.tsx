@@ -1,5 +1,6 @@
 import './Input.scss';
 
+import { FC } from 'react';
 import { useField } from 'formik';
 
 interface InputProps {
@@ -10,7 +11,7 @@ interface InputProps {
   description?: string;
 }
 
-const Input = ({ label, description, ...props }: InputProps) => {
+const Input: FC<InputProps> = ({ label, description, ...props }) => {
   const [field, { touched, error }] = useField(props);
 
   return (

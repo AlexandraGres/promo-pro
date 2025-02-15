@@ -1,7 +1,7 @@
 import './Article.scss';
 
 import { Box, CardActions, Link, Menu, MenuItem } from '@mui/material';
-import { MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
 
 import { ArticleProps } from '../ArticleForm/ArticleForm';
 import Avatar from '@mui/material/Avatar';
@@ -19,9 +19,9 @@ import { useSelector } from 'react-redux';
 
 const ITEM_HEIGHT = 40;
 const MAX_TEXT_LENGTH = 100;
-const defaultImageUrl = 'post-img.png';
+const DEFAULT_IMAGE_URL = 'post-img.png';
 
-const Article = ({
+const Article: FC<ArticleProps> = ({
   id,
   title,
   text,
@@ -31,34 +31,23 @@ const Article = ({
   author,
   profilePicUrl,
   uid,
-}: ArticleProps) => {
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const { deleteArticle } = useArticleManagement();
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
-  const isAuthor = user ? uid === user.uid : false;
 
+  const isAuthor = user?.uid === uid;
   const isOnline = useOnlineStatus();
+  const imageUrl = isOnline ? coverPhotoUrl || DEFAULT_IMAGE_URL : DEFAULT_IMAGE_URL;
 
-  const imageUrl = isOnline ? coverPhotoUrl || defaultImageUrl : defaultImageUrl;
-
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleDelete = async (id: string) => await deleteArticle(id);
-
-  const handleEdit = (id: string) => navigate(`/edit-article/${id}`);
-
-  const handleToggleText = () => {
-    setIsExpanded((prev) => !prev);
-  };
+  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  const handleDelete = async () => await deleteArticle(id);
+  const handleEdit = () => navigate(`/edit-article/${id}`);
+  const toggleTextExpansion = () => setIsExpanded((prev) => !prev);
 
   const truncatedText =
     text.length > MAX_TEXT_LENGTH && !isExpanded
@@ -68,15 +57,11 @@ const Article = ({
   return (
     <Card sx={{ maxWidth: 372, width: '100%', borderRadius: '6px' }} className="article">
       <CardMedia component="img" height="168" image={imageUrl} alt="post image" />
-      {isAuthor ? (
+      {isAuthor && (
         <div>
           <IconButton
-            aria-label="more"
             id="long-button"
-            aria-controls={open ? 'long-menu' : undefined}
-            aria-expanded={open ? 'true' : undefined}
-            aria-haspopup="true"
-            onClick={handleClick}
+            onClick={handleMenuOpen}
             className="menu"
             data-cy="menu-button"
           >
@@ -85,31 +70,26 @@ const Article = ({
 
           <Menu
             id="long-menu"
-            MenuListProps={{
-              'aria-labelledby': 'long-button',
-            }}
             anchorEl={anchorEl}
             open={open}
-            onClose={handleClose}
+            onClose={handleMenuClose}
             slotProps={{
               paper: {
                 style: {
                   maxHeight: ITEM_HEIGHT * 4.5,
-                  width: '20ch',
+                  width: 160,
                 },
               },
             }}
           >
-            <MenuItem data-cy="edit-button" key="edit" onClick={() => handleEdit(id)}>
+            <MenuItem data-cy="edit-button" onClick={() => handleEdit()}>
               Edit
             </MenuItem>
-            <MenuItem data-cy="delete-button" key="delete" onClick={() => handleDelete(id)}>
+            <MenuItem data-cy="delete-button" onClick={() => handleDelete()}>
               Delete
             </MenuItem>
           </Menu>
         </div>
-      ) : (
-        <></>
       )}
 
       <CardContent sx={{ px: 3 }}>
@@ -130,7 +110,7 @@ const Article = ({
         <Avatar src={profilePicUrl} sx={{ height: 32, width: 32 }} />
         <span className="name">{author}</span>
         {text.length > MAX_TEXT_LENGTH && (
-          <Link className="read-more" onClick={handleToggleText}>
+          <Link className="read-more" onClick={toggleTextExpansion}>
             {isExpanded ? 'Show less ←' : 'Read more →'}
           </Link>
         )}

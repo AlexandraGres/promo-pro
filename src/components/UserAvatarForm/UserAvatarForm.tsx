@@ -1,14 +1,15 @@
 import { Box, Button } from '@mui/material';
 import { Form, Formik } from 'formik';
 
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import useEditProfile from '../../hooks/useEditProfile';
-import { RootState } from '../../store/store';
-import { userAvatarSchema } from '../../utils/schemas';
+import { FC } from 'react';
 import FileUpload from '../FileUpload/FileUpload';
+import { RootState } from '../../store/store';
+import useEditProfile from '../../hooks/useEditProfile';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { userAvatarSchema } from '../../utils/schemas';
 
-const UserAvatarForm = () => {
+const UserAvatarForm: FC = () => {
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.auth);
   const uid = user?.uid;
@@ -19,17 +20,10 @@ const UserAvatarForm = () => {
       initialValues={{ file: null }}
       validationSchema={userAvatarSchema}
       onSubmit={async (values, { resetForm }) => {
-        if (!uid) return;
+        if (!uid || !values.file) return;
 
-        const { file } = values;
-
-        if (file) {
-          const success = await updateUserAvatar(uid, file);
-
-          if (success) {
-            resetForm({ values: { file: null } });
-          }
-        }
+        const success = await updateUserAvatar(uid, values.file);
+        if (success) resetForm();
       }}
     >
       {({ isSubmitting, values, isValid }) => (
@@ -40,26 +34,18 @@ const UserAvatarForm = () => {
             <Button
               variant="outlined"
               color="secondary"
-              sx={{
-                fontSize: 14,
-                py: 1,
-                px: 5,
-                mr: 3,
-              }}
+              sx={{ fontSize: 14, py: 1, px: 5, mr: 3 }}
               onClick={() => navigate('/')}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
             <Button
-              sx={{
-                fontSize: 14,
-                py: 1,
-                px: 5,
-              }}
+              sx={{ fontSize: 14, py: 1, px: 5 }}
               type="submit"
               variant="contained"
               color="primary"
-              disabled={isSubmitting || !isValid}
+              disabled={isSubmitting || !isValid || !values.file}
               disableElevation
             >
               Save

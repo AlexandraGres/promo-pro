@@ -1,18 +1,16 @@
 import { Alert, Snackbar, SnackbarCloseReason } from '@mui/material';
-import { FunctionComponent, SyntheticEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { FC, SyntheticEvent } from 'react';
 import { NotificationState, hideNotification } from '../../store/notification/notificationSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../../store/store';
 
-const Notification: FunctionComponent<NotificationState> = () => {
+const Notification: FC<NotificationState> = () => {
   const { message, severity, show } = useSelector((state: RootState) => state.notification);
   const dispatch = useDispatch();
 
   const handleClose = (event?: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+    if (reason === 'clickaway') return;
 
     dispatch(hideNotification());
   };

@@ -4,14 +4,15 @@ import { Box, Button, Container, Link } from '@mui/material';
 import { Form, Formik } from 'formik';
 
 import BgImage from '../../components/BgImage/BgImage';
+import { FC } from 'react';
 import Input from '../../components/Input/Input';
 import SocialButtons from '../../components/SocialButtons/SocialButtons';
 import TextDivider from '../../components/TextDivider/TextDivider';
 import Title from '../../components/Title/Title';
-import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 import { loginSchema } from '../../utils/schemas';
+import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 
-const Login = () => {
+const Login: FC = () => {
   const { login } = useFirebaseAuth();
 
   return (

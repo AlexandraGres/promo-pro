@@ -1,12 +1,13 @@
 import './WeatherWidget.scss';
 
+import { Box, Typography } from '@mui/material';
+import { FC, useCallback, useEffect, useState } from 'react';
+
 import AcUnitIcon from '@mui/icons-material/AcUnit';
 import CloudIcon from '@mui/icons-material/Cloud';
 import GrainIcon from '@mui/icons-material/Grain';
 import ThunderstormIcon from '@mui/icons-material/Thunderstorm';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import { Box, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
 
 interface WeatherProps {
   name: string;
@@ -27,69 +28,60 @@ interface Date {
   dayOfWeek: string;
 }
 
-const kyiv = { lat: 50.4333, lon: 30.5167 };
+const KYIV_LOCATION = { lat: 50.4333, lon: 30.5167 };
 
-const WeatherWidget = () => {
+const WeatherWidget: FC = () => {
   const [weather, setWeather] = useState<WeatherProps | null>(null);
-  const [location, setLocation] = useState(kyiv);
+  const [location, setLocation] = useState(KYIV_LOCATION);
   const [date, setDate] = useState<Date | null>(null);
 
   useEffect(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lon: position.coords.longitude,
-          });
-        },
-        () => {
-          console.log('Location access denied, using Kyiv as default.');
-        },
-      );
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLocation({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+        });
+      });
+    } else {
+      setLocation(KYIV_LOCATION);
+      console.log('Location access denied, using Kyiv as default.');
     }
 
     const today = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      month: 'long',
-      day: 'numeric',
-    };
-    const formattedDate = today.toLocaleDateString(undefined, options);
-    const dayOfWeek = today.toLocaleDateString(undefined, { weekday: 'long' });
-    setDate({ formattedDate, dayOfWeek });
-  }, []);
 
-  useEffect(() => {
-    const fetchWeather = async () => {
-      const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
-
-      try {
-        const response = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&units=metric&appid=${API_KEY}`,
-        );
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch weather data');
-        }
-
-        const data = await response.json();
-        setWeather(data);
-
-        localStorage.setItem('weather', JSON.stringify(data));
-      } catch (error) {
-        console.warn('Error fetching weather data:', error);
-
-        const cachedWeather = localStorage.getItem('weather');
-
-        if (cachedWeather) {
-          setWeather(JSON.parse(cachedWeather));
-        }
-      }
-    };
-    fetchWeather();
+    setDate({
+      formattedDate: today.toLocaleDateString(undefined, { month: 'long', day: 'numeric' }),
+      dayOfWeek: today.toLocaleDateString(undefined, { weekday: 'long' }),
+    });
   }, [location]);
 
-  if (!weather) return <p>Loading weather...</p>;
+  const fetchWeather = useCallback(async () => {
+    const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
+
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&units=metric&appid=${API_KEY}`,
+      );
+
+      if (!response.ok) {
+        setWeather(null);
+        throw new Error('Failed to fetch weather data');
+      }
+
+      const data = await response.json();
+      setWeather(data);
+      localStorage.setItem('weather', JSON.stringify(data));
+    } catch (error) {
+      console.warn('Error fetching weather data:', error);
+      const cachedWeather = localStorage.getItem('weather');
+      if (cachedWeather) setWeather(JSON.parse(cachedWeather));
+    }
+  }, [location]);
+
+  useEffect(() => {
+    fetchWeather();
+  }, [fetchWeather]);
 
   const getWeatherIcon = (description: string) => {
     switch (description.toLowerCase()) {
@@ -112,19 +104,26 @@ const WeatherWidget = () => {
   };
 
   return (
-    <Box sx={{ px: 3, py: 2, ml: 'auto', mt: 2 }} className="weather box">
+    <Box sx={{ p: 3, ml: 'auto', mt: 2 }} className="weather box">
       <Typography textTransform="uppercase">Weather widget</Typography>
-      <h3 className="date">{date?.formattedDate}</h3>
+      <Typography variant="h3" className="date">
+        {date?.formattedDate}
+      </Typography>
       <p>{date?.dayOfWeek}</p>
-      <h2>
-        {Math.round(weather.main.temp)}
-        <sup>°C</sup>
-        {getWeatherIcon(weather.weather[0].description)}
-      </h2>
-      <p className="location">
-        {weather.name}, {weather.sys.country}
-      </p>
-      <div></div>
+      {weather ? (
+        <>
+          <Typography variant="h2">
+            {Math.round(weather.main.temp)}
+            <sup>°C</sup>
+            {getWeatherIcon(weather.weather[0].description)}
+          </Typography>
+          <p className="location">
+            {weather.name}, {weather.sys.country}
+          </p>
+        </>
+      ) : (
+        <p className="no-data">No weather data available...</p>
+      )}
     </Box>
   );
 };

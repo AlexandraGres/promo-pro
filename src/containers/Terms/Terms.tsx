@@ -1,10 +1,11 @@
 import './Terms.scss';
 
 import { Box, Button } from '@mui/material';
-import { FunctionComponent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Terms: FunctionComponent = () => {
+import { FC } from 'react';
+
+const Terms: FC = () => {
   const navigate = useNavigate();
 
   const handleBackClick = () => {

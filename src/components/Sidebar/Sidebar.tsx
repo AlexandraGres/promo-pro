@@ -1,15 +1,16 @@
 import './Sidebar.scss';
 
-import LogoutIcon from '@mui/icons-material/Logout';
 import { Box, Button } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
+import { FC } from 'react';
+import LogoutIcon from '@mui/icons-material/Logout';
 import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 
-const Sidebar = () => {
-  const active = true;
+const Sidebar: FC = () => {
   const { logout } = useFirebaseAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <Box className="sidebar">
@@ -20,8 +21,14 @@ const Sidebar = () => {
       </Box>
       <Box className="menu-container">
         <h3 className="menu-title">Main Menu</h3>
-        <Box className={active ? 'active' : 'disabled'} onClick={() => navigate('/')}>
-          <img src={active ? '/dashboard.svg' : '/dashboard-disabled.svg'} alt="dashboard icon" />
+        <Box
+          className={location.pathname === '/' ? 'active' : 'disabled'}
+          onClick={() => navigate('/')}
+        >
+          <img
+            src={location.pathname === '/' ? '/dashboard.svg' : '/dashboard-disabled.svg'}
+            alt="dashboard icon"
+          />
           <span>Dashboard</span>
         </Box>
       </Box>

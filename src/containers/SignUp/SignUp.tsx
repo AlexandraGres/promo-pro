@@ -3,14 +3,15 @@ import './SignUp.scss';
 import { Box, Button, Container, Link } from '@mui/material';
 import { Form, Formik } from 'formik';
 
-import { useNavigate } from 'react-router-dom';
 import BgImage from '../../components/BgImage/BgImage';
+import { FC } from 'react';
 import Input from '../../components/Input/Input';
 import SocialButtons from '../../components/SocialButtons/SocialButtons';
 import TextDivider from '../../components/TextDivider/TextDivider';
 import Title from '../../components/Title/Title';
-import useFirebaseAuth from '../../hooks/useFirebaseAuth';
 import { signUpSchema } from '../../utils/schemas';
+import useFirebaseAuth from '../../hooks/useFirebaseAuth';
+import { useNavigate } from 'react-router-dom';
 
 interface SignUpProps {
   email: string;
@@ -22,7 +23,7 @@ interface SignUpProps {
   accept: boolean;
 }
 
-const SignUp = () => {
+const SignUp: FC = () => {
   const { signUp } = useFirebaseAuth();
   const navigate = useNavigate();
 
@@ -49,7 +50,13 @@ const SignUp = () => {
             validationSchema={signUpSchema}
             onSubmit={async (values, { resetForm }) => {
               const { email, password, firstName, lastName, age } = values;
-              const success = await signUp(email, password, firstName, lastName, parseInt(age));
+              const success = await signUp(
+                email,
+                password,
+                firstName,
+                lastName,
+                parseInt(age || '0'),
+              );
 
               if (success) {
                 resetForm({ values: initialValues });
@@ -71,7 +78,6 @@ const SignUp = () => {
                   type="text"
                   placeholder="Enter your last name"
                 />
-
                 <Box className="age">
                   <Input name="age" label="Age" type="number" placeholder="Enter your age" />
                 </Box>
@@ -112,11 +118,8 @@ const SignUp = () => {
               </Form>
             )}
           </Formik>
-
           <TextDivider text="Or sign up with" />
-
           <SocialButtons />
-
           <Box sx={{ textAlign: 'center' }}>
             <span className="secondary">Already have an account? </span>
             <Link href="/login" sx={{ fontWeight: '500' }}>
