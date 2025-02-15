@@ -30,6 +30,9 @@ function App() {
           ) : (
             <>
               <Route path="/" element={<Login />} />
+              <Route path="/edit-profile" element={<Navigate to="/" />} />
+              <Route path="/add-article" element={<Navigate to="/" />} />
+              <Route path="/edit-article/:id" element={<Navigate to="/" />} />
               <Route path="/login" element={<Login />} />
               <Route path={'/sign-up'} element={<SignUp />} />
               <Route path={'/forgot-pass'} element={<ForgotPassword />} />
