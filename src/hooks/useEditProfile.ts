@@ -11,6 +11,7 @@ interface User {
   firstName?: string;
   lastName?: string;
   age?: string;
+  photoURL?: string;
 }
 
 const useEditProfile = () => {
