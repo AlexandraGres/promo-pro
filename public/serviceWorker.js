@@ -49,7 +49,6 @@ this.addEventListener('activate', (event) => {
 
 this.addEventListener('fetch', (event) => {
   if (event.request.url.includes('/static/')) {
-    // Cache static assets dynamically
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         return (
@@ -64,7 +63,6 @@ this.addEventListener('fetch', (event) => {
       }),
     );
   } else {
-    // Default fetch behavior (for HTML/API calls)
     event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
   }
 });
